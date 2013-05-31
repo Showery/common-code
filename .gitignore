@@ -1,0 +1,57 @@
+#OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+#Visual Studio files
+Visual*
+Visual\ Stucio*
+*.lastbuildstate
+*.tlog
+*.manifest
+*.bak
+*.obj
+*.opensdf
+*.user
+*.[Oo]bj
+*.pdb
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.idb
+*.exp
+*.ilk
+*.sbr
+*.sdf
+ipch/
+obj/
+
+#Project files
+[Bb]uild/
+[Dd]ebug/
+
+# Office Temp Files
+~$*
+docs/~$*
+docs/._*
+
+data/*
+bin/
+temp/
+temp/*.*
+public-libs/*
+*.orig
+*.jpg
+*.dll
+Log
+*.exe
+*.lib
+*.zip
+
+
