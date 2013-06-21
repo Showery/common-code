@@ -244,3 +244,19 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
 	    fclose(stdout);
     fclose(stdin);
     FreeConsole();
+18.	在DLL或应用程序中截获某窗口的消息，且消息可以继续传给默认窗口函数
+		//传递当前类的指针
+        SetWindowLong(_play_window, GWL_USERDATA, reinterpret_cast<long>(this));
+		//设置处理截获的消息的新窗口函数
+		//并获得旧窗口函数句柄
+		//以便新窗口函数处理完消息之后继续执行旧窗口函数处理消息
+        long ret = SetWindowLong(_play_window, GWL_WNDPROC, reinterpret_cast<long>(SubWndProc));
+		
+		//使用对象指针调用对象的函数
+		//以便操作类对象的成员变量
+		LRESULT SubWndProc(HWND hWnd, int uID, WPARAM wParam, LPARAM lParam)
+    {
+        long user_data = GetWindowLong(hWnd, GWL_USERDATA);
+        MediaPlayer *this_player = reinterpret_cast<MediaPlayer*>(user_data);
+        return this_player->processHwndMsg(hWnd, uID, wParam, lParam);
+    }
