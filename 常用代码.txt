@@ -1,0 +1,246 @@
+1.	Visual Studio 2010使用DirectShow
+#include "streams.h"
+#include "DShow.h"
+#pragma include_alias( "dxtrans.h", "qedit.h" )
+#define __IDxtCompositor_INTERFACE_DEFINED__
+#define __IDxtAlphaSetter_INTERFACE_DEFINED__
+#define __IDxtJpeg_INTERFACE_DEFINED__
+#define __IDxtKey_INTERFACE_DEFINED__
+#include "qedit.h"
+
+2.	安全释放指针
+template<typename T_Delete>
+inline void SAFE_DELETE(T_Delete a)
+{
+	if (a!=NULL)
+		delete(a);
+	a = NULL;
+}
+
+template<typename T_Release>
+inline void SAFE_RELEASE(T_Release p)
+{
+	if (p!=NULL)
+	{
+		p->Release();
+		p = NULL;
+	}
+}
+
+3.	利用循环获取CPU时钟的方法延迟指定时间，单位为毫秒
+void CSplitScreenServerDlg::cmDelay(int ms)
+{
+	LARGE_INTEGER litmp;
+	LONGLONG QPart1,QPart2;
+	double dfMinus, dfFreq, dfTim; 
+	QueryPerformanceFrequency(&litmp);
+	dfFreq = (double)litmp.QuadPart;// 获得计数器的时钟频率
+	QueryPerformanceCounter(&litmp);
+	QPart1 = litmp.QuadPart;// 获得初始值
+	do
+	{
+		QueryPerformanceCounter(&litmp);
+		QPart2 = litmp.QuadPart;//获得中止值
+		dfMinus = (double)(QPart2-QPart1);
+		dfTim = dfMinus/dfFreq;// 获得对应的时间值，单位为秒
+	}while(dfTim<0.001*ms);   //精确到1ms
+}
+
+4.	IMediaDet抓取视频帧
+	HRESULT hr;
+
+	CoCreateInstance(CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void **)&m_pDet);
+	m_pDet->put_Filename(wszFileName);
+
+	long lStreamNums = 0;
+	m_pDet->get_OutputStreams(&lStreamNums);
+
+	GUID majorType;
+	BOOL bIsFoundVideo = FALSE;
+	for (long i=0;i<lStreamNums;i++)
+	{
+		m_pDet->get_CurrentStream(&i);
+		m_pDet->get_StreamType(&majorType);
+		if (MEDIATYPE_Video == majorType)
+		{
+			bIsFoundVideo = TRUE;
+			break;
+		}
+	}
+	if(FALSE == bIsFoundVideo)
+	{
+		MessageBox(TEXT("未找到Video类型"));
+		return;
+	}
+
+	AM_MEDIA_TYPE mt;
+	hr = m_pDet->get_StreamMediaType(&mt);
+// 	AM_MEDIA_TYPE *pmt = (AM_MEDIA_TYPE*)CoTaskMemAlloc(sizeof(AM_MEDIA_TYPE));
+// 	hr = m_pDet->get_StreamMediaType(pmt);
+	if (SUCCEEDED(hr))
+	{
+		if ((mt.formattype == FORMAT_VideoInfo) && 
+			(mt.cbFormat >= sizeof(VIDEOINFOHEADER)))
+		{
+			VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)(mt.pbFormat);
+			m_nFrameWidth = pVih->bmiHeader.biWidth;
+			m_nFrameHeight = pVih->bmiHeader.biHeight;
+		}
+		else
+			hr = VFW_E_INVALIDMEDIATYPE;
+/*		FreeMediaType(mt);*/
+//		cmDeleteMediaType(&mt); 
+	}
+	if (FAILED(hr))
+	{
+	
+		return;
+	}
+
+	double dStreamLength = 0;		
+	double dVal = 0;							
+	m_pDet->get_StreamLength(&dStreamLength);
+	m_pDet->get_FrameRate(&dVal);
+	m_nFrameNums = (int)(dStreamLength*dVal);
+
+5.	MFC使用多线程
+AfxBeginThread(cmVideoThread, (void *)this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
+UINT __cdecl cmVideoThread(PVOID pParam)
+{
+	CPlayAVIDlg *pThis = (CPlayAVIDlg *)pParam;
+	UINT nExitCode = pThis->cmVideoThreadProcess();
+	return nExitCode;
+}
+
+6.	显示BMP位图数据
+		SetDIBitsToDevice(m_hDC, 0, 0, 
+			nWidth, nHeight,
+			0,0,0, nHeight,
+			tempBMPBuffer,pInfo,
+			DIB_RGB_COLORS);
+
+7.	禁止用户拖动鼠标修改对话框大小
+LRESULT CPlayAVIDlg::OnNcHitTest(CPoint point)
+{
+	int ret =CDialog::OnNcHitTest(point);
+
+if(HTTOP ==ret || HTBOTTOM == ret || HTLEFT == ret || HTRIGHT == ret
+		|| HTBOTTOMLEFT == ret ||HTBOTTOMRIGHT == ret || HTTOPLEFT == ret || HTTOPRIGHT == ret)
+		return	HTCLIENT;
+
+	return	ret;
+	return CDialogEx::OnNcHitTest(point);
+}
+
+8.	VS2010并行计算
+//头文件
+#include <ppl.h>
+using namespace Concurrency;
+
+//使用
+	parallel_for(0, nMAX, [&](int i)
+	{});
+
+9.	获得当前模块所在目录
+TCHAR szTemp[101];
+GetModuleFileName(NULL, szTemp, 100);
+
+10.	将字符串资源的数据加载到数组中
+	HMODULE hModule = AfxGetInstanceHandle();	//GetModuleHandle(NULL);
+	HRSRC hres = FindResource(hModule, MAKEINTRESOURCE(IDR_RCDATA_EFFECT), RT_RCDATA);
+	HGLOBAL hGlobal = LoadResource(hModule, hres);
+	LPVOID pRes = LockResource(hGlobal);
+	ULONG dwSize = ::SizeofResource(hModule, hres);
+	BYTE *pBuffer = new BYTE[dwSize];
+	CopyMemory(pBuffer, pRes, dwSize);
+
+11.	Win32 API 写文件
+	HANDLE hFile;
+	DeleteFile(TEXT("D:\\Effect.encrypt"));
+	hFile = CreateFile(TEXT("D:\\Effect.encrypt"),
+		GENERIC_WRITE,
+		FILE_SHARE_WRITE,
+		NULL,
+		CREATE_NEW,
+		FILE_ATTRIBUTE_NORMAL,
+		NULL);
+	DWORD dwWritten = 0;
+	WriteFile(hFile, pBuffer, dwSize, &dwWritten, NULL);
+	CloseHandle(hFile);
+
+12.	DLL中创建窗口
+  m_hWnd = CreateWindow("STATIC", "Play Window", WS_POPUP | WS_VISIBLE,
+                            0, 0, _frame_width, _frame_height, 
+(HWND)NULL, (HMENU)NULL,
+                             (HINSTANCE)NULL, (LPARAM)0);
+13.	指定Video Render渲染到Picture控件
+    IVideoWindow *p_video_window = NULL;
+    hr = mp_graph->QueryInterface(IID_IVideoWindow, ( void** )&p_video_window );
+    if( FAILED( hr ) ) { goto done; }
+    CWnd *p_cwnd = GetDlgItem( IDC_STATIC_PREVIEW );
+    HWND hwnd = p_cwnd->GetSafeHwnd();
+    p_video_window->put_Owner( ( OAHWND )hwnd );
+    p_video_window->put_WindowStyle( WS_CHILD | WS_CLIPCHILDREN );
+    CRect rect;
+    p_cwnd->GetClientRect( &rect );
+p_video_window->SetWindowPosition( 0, 0, rect.right, rect.bottom );
+
+14.	初始化Picture控件为黑色
+//在OnPaint中调用此函数。
+fill_picture_control_black()
+{
+    CWnd *p_picture_wnd = GetDlgItem( IDC_STATIC_PREVIEW );
+    CDC *pDC = p_picture_wnd->GetDC();
+    CBrush blackBrush;
+    blackBrush.CreateSolidBrush( RGB( 0, 0, 0 ));
+    CRect rect;
+    p_picture_wnd->GetClientRect( &rect );
+    pDC->FillRect( rect, &blackBrush );
+}
+15.	Filter查询自定义接口
+NonDelegatingQueryInterface(REFIID riid, void ** ppv)
+{
+    CheckPointer(ppv, E_POINTER);
+
+    if(IID_IXDSource == riid) {
+        return GetInterface(static_cast<IXDSource*>(_output_pin), ppv);
+    }
+    else if(IID_IAMPushSource == riid) {
+        return GetInterface(static_cast<IAMPushSource*>(_output_pin), ppv);
+    }
+    else if(IID_IAMFilterMiscFlags == riid) {
+        return GetInterface(static_cast<IAMFilterMiscFlags*>(this), ppv);
+    } else {
+        return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
+    }
+}
+注意：此处必须使用static_cast，不能使用reinterpret_cast
+16.	查找filter的输出Pin
+findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
+{
+    HRESULT hr = S_OK;
+    CComPtr<IEnumPins> enum_pins;
+    hr = source_filter->EnumPins(&enum_pins);
+    if(FAILED(hr)) return hr;
+    //此处IPin不能使用智能指针
+    IPin *temp_pin = NULL;
+    enum_pins->Reset();
+    while(SUCCEEDED(enum_pins->Next(1, &temp_pin, NULL))) {
+        PIN_DIRECTION pin_dir;
+        temp_pin->QueryDirection(&pin_dir);
+        if(PINDIR_OUTPUT==pin_dir) {
+            *out_pin = temp_pin;
+            break;
+        }
+    }
+    return hr;
+}
+17. 在DLL中创建和删除一个控制台
+    //创建控制台，打开输入输出
+	AllocConsole();
+    freopen("CONOUT$", "w+t", stdout);
+    freopen("CONIN$", "r+t", stdin);
+	//关闭输入输出，释放控制台
+	    fclose(stdout);
+    fclose(stdin);
+    FreeConsole();
