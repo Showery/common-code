@@ -260,3 +260,36 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
         MediaPlayer *this_player = reinterpret_cast<MediaPlayer*>(user_data);
         return this_player->processHwndMsg(hWnd, uID, wParam, lParam);
     }
+
+19.	指定窗口接收DirectShow graph builder的事件
+	(1) 声明graph的消息宏
+	#define WM_GRAPHNOTIFY WM_APP+139
+	(2) 定义graph消息的处理函数
+	HRESULT processGraphEvent()
+	{
+		//_media_event为IMediaEventEx类型的成员变量
+		//此处假设已经成功从Graph builder获取到
+		if(NULL==_media_event) { return S_OK; }
+		long event_code=0, param1=0, param2=0;
+		HRESULT hr = S_OK;
+		hr = _media_event->GetEvent(&event_code, &param1, &param2);
+		if(SUCCESS(hr)) {
+			//在此处执行对事件的处理
+		}
+		return hr;
+	}
+	(3) 在窗口响应函数中添加对WM_GRAPHNOTIFY的响应
+	case WM_GRAPHNOTIFY:
+		processGraphEvent();
+		break;
+	(4) Render graph之后从graph builder获取IMediaEventEx
+		并设置事件接收窗口
+		hr = _graph_builder->QueryInterface(
+		IID_IMediaEventEX,
+		reinterpret_cast<void**>(&_media_event));
+		if(SUCCESS(hr)) {
+			hr = _media_event->SetNotifyWindow(
+			reinterpret_cast<OAHWND>(hwnd), WM_GRAPHNOTIFY, 0);
+		}
+	(5) 释放graph之前停止接收Graph事件
+		_media_event->SetNotifyWindow(NULL, 0, 0);
