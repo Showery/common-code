@@ -293,3 +293,22 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
 		}
 	(5) 释放graph之前停止接收Graph事件
 		_media_event->SetNotifyWindow(NULL, 0, 0);
+		
+20.	在代码中注册COM动态链接库
+	HKEY key_value = NULL;
+    //XD Source filter.
+    if(ERROR_SUCCESS != RegOpenKeyEx(HKEY_CLASSES_ROOT,
+        "CLSID\\{49B47E80-49E7-447A-8CF2-53AEB514AB82}", 0,
+        KEY_READ, &key_value)) {
+      RegCloseKey(key_value);
+      key_value = NULL;
+      HMODULE hmodule = ::LoadLibrary("XDSource.ax");
+      FARPROC reg_func = ::GetProcAddress(hmodule, "DllRegisterServer");
+      if(NULL==reg_func || FAILED(reg_func())) {
+        FreeLibrary(hmodule);
+        return -1;
+      }
+      FreeLibrary(hmodule);
+    }
+    RegCloseKey(key_value);
+    key_value = NULL;
