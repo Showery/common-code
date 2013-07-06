@@ -197,6 +197,7 @@ fill_picture_control_black()
     p_picture_wnd->GetClientRect( &rect );
     pDC->FillRect( rect, &blackBrush );
 }
+
 15.	Filter查询自定义接口
 NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
@@ -215,6 +216,7 @@ NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 注意：此处必须使用static_cast，不能使用reinterpret_cast
+
 16.	查找filter的输出Pin
 findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
 {
@@ -235,6 +237,7 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
     }
     return hr;
 }
+
 17. 在DLL中创建和删除一个控制台
     //创建控制台，打开输入输出
 	AllocConsole();
@@ -244,6 +247,7 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
 	    fclose(stdout);
     fclose(stdin);
     FreeConsole();
+
 18.	在DLL或应用程序中截获某窗口的消息，且消息可以继续传给默认窗口函数
 		//传递当前类的指针
         SetWindowLong(_play_window, GWL_USERDATA, reinterpret_cast<long>(this));
@@ -312,3 +316,18 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
     }
     RegCloseKey(key_value);
     key_value = NULL;
+	
+21. MFC Unicode编码格式下打开文件并将文件名转换为char*
+    char *file_path = NULL;
+    CFileDialog file_dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+                                        TEXT("MP4 Files(*.MP4)|*.mp4|All Files(*.*)|*.*||"));
+    if(IDOK != file_dlg.DoModal()) {
+        return;
+    }
+    CString szPath = file_dlg.GetPathName();
+    TCHAR wszPath[260] = {'\0'};
+    lstrcpy(wszPath, szPath);
+    DWORD dwNum = WideCharToMultiByte(CP_OEMCP, NULL, wszPath, -1, NULL, 0, NULL, FALSE);
+    file_path = new char[dwNum];
+    WideCharToMultiByte(CP_OEMCP, NULL, wszPath, -1, file_path, dwNum, NULL, FALSE);
+    SafeDelete(&file_path);
