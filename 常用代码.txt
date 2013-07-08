@@ -331,3 +331,19 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
     file_path = new char[dwNum];
     WideCharToMultiByte(CP_OEMCP, NULL, wszPath, -1, file_path, dwNum, NULL, FALSE);
     SafeDelete(&file_path);
+	
+22. char*转wchar_t*(WCHAR*)
+	char strMulByte[50] = "Just a test."
+	DWORD size = MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, NULL, 0);
+    wchar_t strWideChar = new wchar_t[size];
+    MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, strWideChar, size);
+	
+23.	Win32 API 文件与路径是否存在的判断方法
+	路径判断
+	PathIsDirectory(path);
+	文件判断
+	WIN32_FIND_DATA find_file_data;
+    HANDLE find_file = FindFirstFile(file_path, &find_file_data);
+	if(INVALID_HANDLE_VALUE != find_file) {	//文件存在
+		FindClose(find_file);
+	}
