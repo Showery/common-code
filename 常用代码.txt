@@ -347,3 +347,39 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
 	if(INVALID_HANDLE_VALUE != find_file) {	//文件存在
 		FindClose(find_file);
 	}
+	
+24.	使用多媒体定时器
+	#include <MMSystem.h>
+	#pragma comment(lib, "winmm.lib")
+	//定义精度和延时，单位为毫秒
+	const int TIMER_PRECISION = 5;
+	const int TIMER_DELAY = 500;
+	//定时器回调函数
+	void CALLBACK handleTimer(UINT id, UINT msg, DWORD dwUser, DWORD dw1, DWORD dw2)
+	{
+		ClassName *this_class = reinterpret_cast<ClassName*>(dwUser);
+		this_class->processTimer();
+	}
+	//创建定时器
+	void ClassName::createTimer()
+	{
+		timeBeginPeriod(TIMER_PRECISION);
+		_timer_ID = timeSetEvent(
+		TIMER_DELAY, TIMER_PRECISION,
+		processTimer, reinterpret_cast<DWORD_PTR>(this), TIME_PERIODIC);
+		_is_timer_on = true;
+	}
+	//销毁定时器
+	void ClassName::destroyTimer()
+	{
+		if(_is_timer_on) {
+			timeKillEvent(_timer_ID);
+            timeEndPeriod(TIMER_PRECISION);
+            _is_timer_on = false;
+		}
+	}
+	void ClassName::processTimer()
+	{
+		//做相关处理
+	}
+	
