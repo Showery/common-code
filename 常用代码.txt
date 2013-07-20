@@ -383,3 +383,8 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
 		//做相关处理
 	}
 	
+25.	禁用拷贝构造函数
+#define DISALLOW_COPY_AND_ASSIGN(TypeName)\
+    TypeName(const TypeName&);            \
+    void operator=(const TypeName&)
+	
