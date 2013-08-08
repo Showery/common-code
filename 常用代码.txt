@@ -228,25 +228,47 @@ NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 }
 注意：此处必须使用static_cast，不能使用reinterpret_cast
 
-16.    查找filter的输出Pin
-findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
+16.    查找filter指定方向的Pin，返回第一个符合要求的pin。
+HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTION find_dir)
 {
+    if(NULL==base_filter) {
+        return E_POINTER;
+    }
+
     HRESULT hr = S_OK;
-    CComPtr<IEnumPins> enum_pins;
-    hr = source_filter->EnumPins(&enum_pins);
+    IEnumPins *enum_pins = NULL;
+    hr = base_filter->EnumPins(&enum_pins);
+    if(FAILED(hr)) {
+        SafeRelease(&enum_pins);
+        return hr;
+    }
     if(FAILED(hr)) return hr;
-    //此处IPin不能使用智能指针
     IPin *temp_pin = NULL;
     enum_pins->Reset();
     while(SUCCEEDED(enum_pins->Next(1, &temp_pin, NULL))) {
+        //防止意外错误发生
+        if(NULL==temp_pin) break;
         PIN_DIRECTION pin_dir;
         temp_pin->QueryDirection(&pin_dir);
-        if(PINDIR_OUTPUT==pin_dir) {
-            *out_pin = temp_pin;
-            break;
+        if(find_dir != pin_dir) {
+            SafeRelease(&temp_pin);
+            continue;
         }
+        *ret_pin = temp_pin;
+        //This method needs to be called.
+        //Because we are going to release temp_pin.
+        //And the "=" operation doesn't increase reference number.
+        (*ret_pin)->AddRef();
+        SafeRelease(&temp_pin);
+        break;
     }
-    return hr;
+
+    SafeRelease(&temp_pin);
+    SafeRelease(&enum_pins);
+    if(NULL==(*ret_pin))
+        return E_FAIL;
+    else
+        return S_OK;
 }
 
 17. 在DLL中创建和删除一个控制台
