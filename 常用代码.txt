@@ -1,4 +1,4 @@
-1.	Visual Studio 2010使用DirectShow
+1.    Visual Studio 2010使用DirectShow
 #include "streams.h"
 #include "DShow.h"
 #pragma include_alias( "dxtrans.h", "qedit.h" )
@@ -8,7 +8,7 @@
 #define __IDxtKey_INTERFACE_DEFINED__
 #include "qedit.h"
 
-2.	安全释放指针
+2.    安全释放指针
 释放New出来的单个对象
 template< typename T_Delete >
 void SafeDelete( T_Delete **pp )
@@ -38,153 +38,153 @@ ULONG SafeRelease( T_Release **pp )
     return ret;
 }
 
-3.	利用循环获取CPU时钟的方法延迟指定时间，单位为毫秒
+3.    利用循环获取CPU时钟的方法延迟指定时间，单位为毫秒
 void CSplitScreenServerDlg::cmDelay(int ms)
 {
-	LARGE_INTEGER litmp;
-	LONGLONG QPart1,QPart2;
-	double dfMinus, dfFreq, dfTim; 
-	QueryPerformanceFrequency(&litmp);
-	dfFreq = (double)litmp.QuadPart;// 获得计数器的时钟频率
-	QueryPerformanceCounter(&litmp);
-	QPart1 = litmp.QuadPart;// 获得初始值
-	do
-	{
-		QueryPerformanceCounter(&litmp);
-		QPart2 = litmp.QuadPart;//获得中止值
-		dfMinus = (double)(QPart2-QPart1);
-		dfTim = dfMinus/dfFreq;// 获得对应的时间值，单位为秒
-	}while(dfTim<0.001*ms);   //精确到1ms
+    LARGE_INTEGER litmp;
+    LONGLONG QPart1,QPart2;
+    double dfMinus, dfFreq, dfTim; 
+    QueryPerformanceFrequency(&litmp);
+    dfFreq = (double)litmp.QuadPart;// 获得计数器的时钟频率
+    QueryPerformanceCounter(&litmp);
+    QPart1 = litmp.QuadPart;// 获得初始值
+    do
+    {
+        QueryPerformanceCounter(&litmp);
+        QPart2 = litmp.QuadPart;//获得中止值
+        dfMinus = (double)(QPart2-QPart1);
+        dfTim = dfMinus/dfFreq;// 获得对应的时间值，单位为秒
+    }while(dfTim<0.001*ms);   //精确到1ms
 }
 
-4.	IMediaDet抓取视频帧
-	HRESULT hr;
+4.    IMediaDet抓取视频帧
+    HRESULT hr;
 
-	CoCreateInstance(CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void **)&m_pDet);
-	m_pDet->put_Filename(wszFileName);
+    CoCreateInstance(CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void **)&m_pDet);
+    m_pDet->put_Filename(wszFileName);
 
-	long lStreamNums = 0;
-	m_pDet->get_OutputStreams(&lStreamNums);
+    long lStreamNums = 0;
+    m_pDet->get_OutputStreams(&lStreamNums);
 
-	GUID majorType;
-	BOOL bIsFoundVideo = FALSE;
-	for (long i=0;i<lStreamNums;i++)
-	{
-		m_pDet->get_CurrentStream(&i);
-		m_pDet->get_StreamType(&majorType);
-		if (MEDIATYPE_Video == majorType)
-		{
-			bIsFoundVideo = TRUE;
-			break;
-		}
-	}
-	if(FALSE == bIsFoundVideo)
-	{
-		MessageBox(TEXT("未找到Video类型"));
-		return;
-	}
+    GUID majorType;
+    BOOL bIsFoundVideo = FALSE;
+    for (long i=0;i<lStreamNums;i++)
+    {
+        m_pDet->get_CurrentStream(&i);
+        m_pDet->get_StreamType(&majorType);
+        if (MEDIATYPE_Video == majorType)
+        {
+            bIsFoundVideo = TRUE;
+            break;
+        }
+    }
+    if(FALSE == bIsFoundVideo)
+    {
+        MessageBox(TEXT("未找到Video类型"));
+        return;
+    }
 
-	AM_MEDIA_TYPE mt;
-	hr = m_pDet->get_StreamMediaType(&mt);
-// 	AM_MEDIA_TYPE *pmt = (AM_MEDIA_TYPE*)CoTaskMemAlloc(sizeof(AM_MEDIA_TYPE));
-// 	hr = m_pDet->get_StreamMediaType(pmt);
-	if (SUCCEEDED(hr))
-	{
-		if ((mt.formattype == FORMAT_VideoInfo) && 
-			(mt.cbFormat >= sizeof(VIDEOINFOHEADER)))
-		{
-			VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)(mt.pbFormat);
-			m_nFrameWidth = pVih->bmiHeader.biWidth;
-			m_nFrameHeight = pVih->bmiHeader.biHeight;
-		}
-		else
-			hr = VFW_E_INVALIDMEDIATYPE;
-/*		FreeMediaType(mt);*/
-//		cmDeleteMediaType(&mt); 
-	}
-	if (FAILED(hr))
-	{
-	
-		return;
-	}
+    AM_MEDIA_TYPE mt;
+    hr = m_pDet->get_StreamMediaType(&mt);
+//     AM_MEDIA_TYPE *pmt = (AM_MEDIA_TYPE*)CoTaskMemAlloc(sizeof(AM_MEDIA_TYPE));
+//     hr = m_pDet->get_StreamMediaType(pmt);
+    if (SUCCEEDED(hr))
+    {
+        if ((mt.formattype == FORMAT_VideoInfo) && 
+            (mt.cbFormat >= sizeof(VIDEOINFOHEADER)))
+        {
+            VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)(mt.pbFormat);
+            m_nFrameWidth = pVih->bmiHeader.biWidth;
+            m_nFrameHeight = pVih->bmiHeader.biHeight;
+        }
+        else
+            hr = VFW_E_INVALIDMEDIATYPE;
+/*        FreeMediaType(mt);*/
+//        cmDeleteMediaType(&mt); 
+    }
+    if (FAILED(hr))
+    {
+    
+        return;
+    }
 
-	double dStreamLength = 0;		
-	double dVal = 0;							
-	m_pDet->get_StreamLength(&dStreamLength);
-	m_pDet->get_FrameRate(&dVal);
-	m_nFrameNums = (int)(dStreamLength*dVal);
+    double dStreamLength = 0;        
+    double dVal = 0;                            
+    m_pDet->get_StreamLength(&dStreamLength);
+    m_pDet->get_FrameRate(&dVal);
+    m_nFrameNums = (int)(dStreamLength*dVal);
 
-5.	MFC使用多线程
+5.    MFC使用多线程
 AfxBeginThread(cmVideoThread, (void *)this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
 UINT __cdecl cmVideoThread(PVOID pParam)
 {
-	CPlayAVIDlg *pThis = (CPlayAVIDlg *)pParam;
-	UINT nExitCode = pThis->cmVideoThreadProcess();
-	return nExitCode;
+    CPlayAVIDlg *pThis = (CPlayAVIDlg *)pParam;
+    UINT nExitCode = pThis->cmVideoThreadProcess();
+    return nExitCode;
 }
 
-6.	显示BMP位图数据
-		SetDIBitsToDevice(m_hDC, 0, 0, 
-			nWidth, nHeight,
-			0,0,0, nHeight,
-			tempBMPBuffer,pInfo,
-			DIB_RGB_COLORS);
+6.    显示BMP位图数据
+        SetDIBitsToDevice(m_hDC, 0, 0, 
+            nWidth, nHeight,
+            0,0,0, nHeight,
+            tempBMPBuffer,pInfo,
+            DIB_RGB_COLORS);
 
-7.	禁止用户拖动鼠标修改对话框大小
+7.    禁止用户拖动鼠标修改对话框大小
 LRESULT CPlayAVIDlg::OnNcHitTest(CPoint point)
 {
-	int ret =CDialog::OnNcHitTest(point);
+    int ret =CDialog::OnNcHitTest(point);
 
 if(HTTOP ==ret || HTBOTTOM == ret || HTLEFT == ret || HTRIGHT == ret
-		|| HTBOTTOMLEFT == ret ||HTBOTTOMRIGHT == ret || HTTOPLEFT == ret || HTTOPRIGHT == ret)
-		return	HTCLIENT;
+        || HTBOTTOMLEFT == ret ||HTBOTTOMRIGHT == ret || HTTOPLEFT == ret || HTTOPRIGHT == ret)
+        return    HTCLIENT;
 
-	return	ret;
-	return CDialogEx::OnNcHitTest(point);
+    return    ret;
+    return CDialogEx::OnNcHitTest(point);
 }
 
-8.	VS2010并行计算
+8.    VS2010并行计算
 //头文件
 #include <ppl.h>
 using namespace Concurrency;
 
 //使用
-	parallel_for(0, nMAX, [&](int i)
-	{});
+    parallel_for(0, nMAX, [&](int i)
+    {});
 
-9.	获得当前模块所在目录
+9.    获得当前模块所在目录
 TCHAR szTemp[101];
 GetModuleFileName(NULL, szTemp, 100);
 
-10.	将字符串资源的数据加载到数组中
-	HMODULE hModule = AfxGetInstanceHandle();	//GetModuleHandle(NULL);
-	HRSRC hres = FindResource(hModule, MAKEINTRESOURCE(IDR_RCDATA_EFFECT), RT_RCDATA);
-	HGLOBAL hGlobal = LoadResource(hModule, hres);
-	LPVOID pRes = LockResource(hGlobal);
-	ULONG dwSize = ::SizeofResource(hModule, hres);
-	BYTE *pBuffer = new BYTE[dwSize];
-	CopyMemory(pBuffer, pRes, dwSize);
+10.    将字符串资源的数据加载到数组中
+    HMODULE hModule = AfxGetInstanceHandle();    //GetModuleHandle(NULL);
+    HRSRC hres = FindResource(hModule, MAKEINTRESOURCE(IDR_RCDATA_EFFECT), RT_RCDATA);
+    HGLOBAL hGlobal = LoadResource(hModule, hres);
+    LPVOID pRes = LockResource(hGlobal);
+    ULONG dwSize = ::SizeofResource(hModule, hres);
+    BYTE *pBuffer = new BYTE[dwSize];
+    CopyMemory(pBuffer, pRes, dwSize);
 
-11.	Win32 API 写文件
-	HANDLE hFile;
-	DeleteFile(TEXT("D:\\Effect.encrypt"));
-	hFile = CreateFile(TEXT("D:\\Effect.encrypt"),
-		GENERIC_WRITE,
-		FILE_SHARE_WRITE,
-		NULL,
-		CREATE_NEW,
-		FILE_ATTRIBUTE_NORMAL,
-		NULL);
-	DWORD dwWritten = 0;
-	WriteFile(hFile, pBuffer, dwSize, &dwWritten, NULL);
-	CloseHandle(hFile);
+11.    Win32 API 写文件
+    HANDLE hFile;
+    DeleteFile(TEXT("D:\\Effect.encrypt"));
+    hFile = CreateFile(TEXT("D:\\Effect.encrypt"),
+        GENERIC_WRITE,
+        FILE_SHARE_WRITE,
+        NULL,
+        CREATE_NEW,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL);
+    DWORD dwWritten = 0;
+    WriteFile(hFile, pBuffer, dwSize, &dwWritten, NULL);
+    CloseHandle(hFile);
 
-12.	DLL中创建窗口
+12.    DLL中创建窗口
   m_hWnd = CreateWindow("STATIC", "Play Window", WS_POPUP | WS_VISIBLE,
                             0, 0, _frame_width, _frame_height, 
 (HWND)NULL, (HMENU)NULL,
                              (HINSTANCE)NULL, (LPARAM)0);
-13.	指定Video Render渲染到Picture控件
+13.    指定Video Render渲染到Picture控件
     IVideoWindow *p_video_window = NULL;
     hr = mp_graph->QueryInterface(IID_IVideoWindow, ( void** )&p_video_window );
     if( FAILED( hr ) ) { goto done; }
@@ -196,7 +196,7 @@ GetModuleFileName(NULL, szTemp, 100);
     p_cwnd->GetClientRect( &rect );
 p_video_window->SetWindowPosition( 0, 0, rect.right, rect.bottom );
 
-14.	初始化Picture控件为黑色
+14.    初始化Picture控件为黑色
 //在OnPaint中调用此函数。
 fill_picture_control_black()
 {
@@ -209,7 +209,7 @@ fill_picture_control_black()
     pDC->FillRect( rect, &blackBrush );
 }
 
-15.	Filter查询自定义接口
+15.    Filter查询自定义接口
 NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     CheckPointer(ppv, E_POINTER);
@@ -228,7 +228,7 @@ NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 }
 注意：此处必须使用static_cast，不能使用reinterpret_cast
 
-16.	查找filter的输出Pin
+16.    查找filter的输出Pin
 findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
 {
     HRESULT hr = S_OK;
@@ -251,66 +251,66 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
 
 17. 在DLL中创建和删除一个控制台
     //创建控制台，打开输入输出
-	AllocConsole();
+    AllocConsole();
     freopen("CONOUT$", "w+t", stdout);
     freopen("CONIN$", "r+t", stdin);
-	//关闭输入输出，释放控制台
-	    fclose(stdout);
+    //关闭输入输出，释放控制台
+        fclose(stdout);
     fclose(stdin);
     FreeConsole();
 
-18.	在DLL或应用程序中截获某窗口的消息，且消息可以继续传给默认窗口函数
-		//传递当前类的指针
+18.    在DLL或应用程序中截获某窗口的消息，且消息可以继续传给默认窗口函数
+        //传递当前类的指针
         SetWindowLong(_play_window, GWL_USERDATA, reinterpret_cast<long>(this));
-		//设置处理截获的消息的新窗口函数
-		//并获得旧窗口函数句柄
-		//以便新窗口函数处理完消息之后继续执行旧窗口函数处理消息
+        //设置处理截获的消息的新窗口函数
+        //并获得旧窗口函数句柄
+        //以便新窗口函数处理完消息之后继续执行旧窗口函数处理消息
         long ret = SetWindowLong(_play_window, GWL_WNDPROC, reinterpret_cast<long>(SubWndProc));
-		
-		//使用对象指针调用对象的函数
-		//以便操作类对象的成员变量
-		LRESULT SubWndProc(HWND hWnd, int uID, WPARAM wParam, LPARAM lParam)
+        
+        //使用对象指针调用对象的函数
+        //以便操作类对象的成员变量
+        LRESULT SubWndProc(HWND hWnd, int uID, WPARAM wParam, LPARAM lParam)
     {
         long user_data = GetWindowLong(hWnd, GWL_USERDATA);
         MediaPlayer *this_player = reinterpret_cast<MediaPlayer*>(user_data);
         return this_player->processHwndMsg(hWnd, uID, wParam, lParam);
     }
 
-19.	指定窗口接收DirectShow graph builder的事件
-	(1) 声明graph的消息宏
-	#define WM_GRAPHNOTIFY WM_APP+139
-	(2) 定义graph消息的处理函数
-	HRESULT processGraphEvent()
-	{
-		//_media_event为IMediaEventEx类型的成员变量
-		//此处假设已经成功从Graph builder获取到
-		if(NULL==_media_event) { return S_OK; }
-		long event_code=0, param1=0, param2=0;
-		HRESULT hr = S_OK;
-		hr = _media_event->GetEvent(&event_code, &param1, &param2);
-		if(SUCCESS(hr)) {
-			//在此处执行对事件的处理
-		}
-		return hr;
-	}
-	(3) 在窗口响应函数中添加对WM_GRAPHNOTIFY的响应
-	case WM_GRAPHNOTIFY:
-		processGraphEvent();
-		break;
-	(4) Render graph之后从graph builder获取IMediaEventEx
-		并设置事件接收窗口
-		hr = _graph_builder->QueryInterface(
-		IID_IMediaEventEX,
-		reinterpret_cast<void**>(&_media_event));
-		if(SUCCESS(hr)) {
-			hr = _media_event->SetNotifyWindow(
-			reinterpret_cast<OAHWND>(hwnd), WM_GRAPHNOTIFY, 0);
-		}
-	(5) 释放graph之前停止接收Graph事件
-		_media_event->SetNotifyWindow(NULL, 0, 0);
-		
-20.	在代码中注册COM动态链接库
-	HKEY key_value = NULL;
+19.    指定窗口接收DirectShow graph builder的事件
+    (1) 声明graph的消息宏
+    #define WM_GRAPHNOTIFY WM_APP+139
+    (2) 定义graph消息的处理函数
+    HRESULT processGraphEvent()
+    {
+        //_media_event为IMediaEventEx类型的成员变量
+        //此处假设已经成功从Graph builder获取到
+        if(NULL==_media_event) { return S_OK; }
+        long event_code=0, param1=0, param2=0;
+        HRESULT hr = S_OK;
+        hr = _media_event->GetEvent(&event_code, &param1, &param2);
+        if(SUCCESS(hr)) {
+            //在此处执行对事件的处理
+        }
+        return hr;
+    }
+    (3) 在窗口响应函数中添加对WM_GRAPHNOTIFY的响应
+    case WM_GRAPHNOTIFY:
+        processGraphEvent();
+        break;
+    (4) Render graph之后从graph builder获取IMediaEventEx
+        并设置事件接收窗口
+        hr = _graph_builder->QueryInterface(
+        IID_IMediaEventEX,
+        reinterpret_cast<void**>(&_media_event));
+        if(SUCCESS(hr)) {
+            hr = _media_event->SetNotifyWindow(
+            reinterpret_cast<OAHWND>(hwnd), WM_GRAPHNOTIFY, 0);
+        }
+    (5) 释放graph之前停止接收Graph事件
+        _media_event->SetNotifyWindow(NULL, 0, 0);
+        
+20.    在代码中注册COM动态链接库
+    HKEY key_value = NULL;
     //XD Source filter.
     if(ERROR_SUCCESS != RegOpenKeyEx(HKEY_CLASSES_ROOT,
         "CLSID\\{49B47E80-49E7-447A-8CF2-53AEB514AB82}", 0,
@@ -327,7 +327,7 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
     }
     RegCloseKey(key_value);
     key_value = NULL;
-	
+    
 21. MFC Unicode编码格式下打开文件并将文件名转换为char*
     char *file_path = NULL;
     CFileDialog file_dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -342,65 +342,65 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
     file_path = new char[dwNum];
     WideCharToMultiByte(CP_OEMCP, NULL, wszPath, -1, file_path, dwNum, NULL, FALSE);
     SafeDelete(&file_path);
-	
+    
 22. char*转wchar_t*(WCHAR*)
-	char strMulByte[50] = "Just a test."
-	DWORD size = MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, NULL, 0);
+    char strMulByte[50] = "Just a test."
+    DWORD size = MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, NULL, 0);
     wchar_t strWideChar = new wchar_t[size];
     MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, strWideChar, size);
-	
-23.	Win32 API 文件与路径是否存在的判断方法
-	路径判断
-	PathIsDirectory(path);
-	文件判断
-	WIN32_FIND_DATA find_file_data;
+    
+23.    Win32 API 文件与路径是否存在的判断方法
+    路径判断
+    PathIsDirectory(path);
+    文件判断
+    WIN32_FIND_DATA find_file_data;
     HANDLE find_file = FindFirstFile(file_path, &find_file_data);
-	if(INVALID_HANDLE_VALUE != find_file) {	//文件存在
-		FindClose(find_file);
-	}
-	
-24.	使用多媒体定时器
-	#include <MMSystem.h>
-	#pragma comment(lib, "winmm.lib")
-	//定义精度和延时，单位为毫秒
-	const int TIMER_PRECISION = 5;
-	const int TIMER_DELAY = 500;
-	//定时器回调函数
-	void CALLBACK handleTimer(UINT id, UINT msg, DWORD dwUser, DWORD dw1, DWORD dw2)
-	{
-		ClassName *this_class = reinterpret_cast<ClassName*>(dwUser);
-		this_class->processTimer();
-	}
-	//创建定时器
-	void ClassName::createTimer()
-	{
-		timeBeginPeriod(TIMER_PRECISION);
-		_timer_ID = timeSetEvent(
-		TIMER_DELAY, TIMER_PRECISION,
-		processTimer, reinterpret_cast<DWORD_PTR>(this), TIME_PERIODIC);
-		_is_timer_on = true;
-	}
-	//销毁定时器
-	void ClassName::destroyTimer()
-	{
-		if(_is_timer_on) {
-			timeKillEvent(_timer_ID);
+    if(INVALID_HANDLE_VALUE != find_file) {    //文件存在
+        FindClose(find_file);
+    }
+    
+24.    使用多媒体定时器
+    #include <MMSystem.h>
+    #pragma comment(lib, "winmm.lib")
+    //定义精度和延时，单位为毫秒
+    const int TIMER_PRECISION = 5;
+    const int TIMER_DELAY = 500;
+    //定时器回调函数
+    void CALLBACK handleTimer(UINT id, UINT msg, DWORD dwUser, DWORD dw1, DWORD dw2)
+    {
+        ClassName *this_class = reinterpret_cast<ClassName*>(dwUser);
+        this_class->processTimer();
+    }
+    //创建定时器
+    void ClassName::createTimer()
+    {
+        timeBeginPeriod(TIMER_PRECISION);
+        _timer_ID = timeSetEvent(
+        TIMER_DELAY, TIMER_PRECISION,
+        processTimer, reinterpret_cast<DWORD_PTR>(this), TIME_PERIODIC);
+        _is_timer_on = true;
+    }
+    //销毁定时器
+    void ClassName::destroyTimer()
+    {
+        if(_is_timer_on) {
+            timeKillEvent(_timer_ID);
             timeEndPeriod(TIMER_PRECISION);
             _is_timer_on = false;
-		}
-	}
-	void ClassName::processTimer()
-	{
-		//做相关处理
-	}
-	
-25.	禁用拷贝构造函数
+        }
+    }
+    void ClassName::processTimer()
+    {
+        //做相关处理
+    }
+    
+25.    禁用拷贝构造函数
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)\
     TypeName(const TypeName&);            \
     void operator=(const TypeName&)
-	
+    
 26. 计算时间差
-	方法一：
+    方法一：
     LARGE_INTEGER litmp;
     LONGLONG QPart1,QPart2;
     double dfMinus, dfFreq, dfTime; 
@@ -408,17 +408,17 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
     dfFreq = (double)litmp.QuadPart;// 获得计数器的时钟频率
     QueryPerformanceCounter(&litmp);
     QPart1 = litmp.QuadPart;// 获得初始值
-	/*****代码执行部分*****/
+    /*****代码执行部分*****/
     QueryPerformanceCounter(&litmp);
     QPart2 = litmp.QuadPart;//获得结束值
     dfMinus = static_cast<double>(QPart2 - QPart1);
     dfTime = dfMinus * 1000.0 /dfFreq; //获得时间差，单位为毫秒
-	方法二：
+    方法二：
     DWORD begin_time, end_time;
     timeBeginPeriod(1);
     begin_time = timeGetTime();
-	/*****代码执行部分*****/
-	end_time = timeGetTime();
+    /*****代码执行部分*****/
+    end_time = timeGetTime();
     end_time -= begin_time;
     timeEndPeriod(1);
-	
+    
