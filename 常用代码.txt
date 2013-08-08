@@ -388,3 +388,26 @@ findSourcePin(IBaseFilter *source_filter, IPin **out_pin)
     TypeName(const TypeName&);            \
     void operator=(const TypeName&)
 	
+26. 计算时间差
+	方法一：
+    LARGE_INTEGER litmp;
+    LONGLONG QPart1,QPart2;
+    double dfMinus, dfFreq, dfTime; 
+    QueryPerformanceFrequency(&litmp);
+    dfFreq = (double)litmp.QuadPart;// 获得计数器的时钟频率
+    QueryPerformanceCounter(&litmp);
+    QPart1 = litmp.QuadPart;// 获得初始值
+	/*****代码执行部分*****/
+    QueryPerformanceCounter(&litmp);
+    QPart2 = litmp.QuadPart;//获得结束值
+    dfMinus = static_cast<double>(QPart2 - QPart1);
+    dfTime = dfMinus * 1000.0 /dfFreq; //获得时间差，单位为毫秒
+	方法二：
+    DWORD begin_time, end_time;
+    timeBeginPeriod(1);
+    begin_time = timeGetTime();
+	/*****代码执行部分*****/
+	end_time = timeGetTime();
+    end_time -= begin_time;
+    timeEndPeriod(1);
+	
