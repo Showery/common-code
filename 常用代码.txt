@@ -9,22 +9,33 @@
 #include "qedit.h"
 
 2.	安全释放指针
-template<typename T_Delete>
-inline void SAFE_DELETE(T_Delete a)
+释放New出来的单个对象
+template< typename T_Delete >
+void SafeDelete( T_Delete **pp )
 {
-	if (a!=NULL)
-		delete(a);
-	a = NULL;
+    if ( *pp!=NULL )
+        delete ( *pp );
+    *pp = NULL;
 }
-
-template<typename T_Release>
-inline void SAFE_RELEASE(T_Release p)
+释放New出来的数组
+template< typename T_Delete >
+void SafeDeleteArray( T_Delete **pp)
 {
-	if (p!=NULL)
-	{
-		p->Release();
-		p = NULL;
-	}
+    if ( *pp!=NULL )
+        delete []( *pp );
+    *pp = NULL;
+}
+释放COM指针，返回值为引用计数
+template< typename T_Release >
+ULONG SafeRelease( T_Release **pp )
+{
+    ULONG ret = 0;
+    if ( *pp!=NULL )
+    {
+        ret = ( *pp )->Release();
+        *pp = NULL;
+    }
+    return ret;
 }
 
 3.	利用循环获取CPU时钟的方法延迟指定时间，单位为毫秒
