@@ -443,4 +443,49 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     end_time = timeGetTime();
     end_time -= begin_time;
     timeEndPeriod(1);
-    
+	
+27. 信号量封装
+    //声明semaphore类
+    class semaphore
+    {
+    public:
+        semaphore(int val = 0);
+        ~semaphore(void);
+    public:
+        void post(void);
+        DWORD wait(DWORD ms);
+        void reset(void);
+    private:
+        int fInitial;
+        HANDLE fHandle;
+    };
+    //实现semaphore类
+    semaphore::semaphore(int val)
+        : fInitial(val)
+    {
+        fHandle = CreateSemaphore(nullptr, fInitial, 0xFFFF, nullptr);
+    }
+    semaphore::~semaphore(void)
+    {
+        if (fHandle) {
+            CloseHandle(fHandle);
+            fHandle = nullptr;
+        }
+    }
+    void semaphore::post(void)
+    {
+        ReleaseSemaphore(fHandle, 1, nullptr);
+    }
+    DWORD semaphore::wait(DWORD ms)
+    {
+        return WaitForSingleObject(fHandle, ms);
+    }
+    void semaphore::reset(void)
+    {
+        if (fHandle) {
+            CloseHandle(fHandle);
+            fHandle = nullptr;
+        }
+        fHandle = CreateSemaphore(nullptr, fInitial, 0xFFFF, nullptr);
+    }
+	
