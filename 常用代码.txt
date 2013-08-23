@@ -1,4 +1,4 @@
-1.    Visual Studio 2010使用DirectShow
+1. Visual Studio 2010使用DirectShow
 #include "streams.h"
 #include "DShow.h"
 #pragma include_alias( "dxtrans.h", "qedit.h" )
@@ -8,7 +8,7 @@
 #define __IDxtKey_INTERFACE_DEFINED__
 #include "qedit.h"
 
-2.    安全释放指针
+2. 安全释放指针
 释放New出来的单个对象
 template< typename T_Delete >
 void SafeDelete( T_Delete **pp )
@@ -38,7 +38,7 @@ ULONG SafeRelease( T_Release **pp )
     return ret;
 }
 
-3.    利用循环获取CPU时钟的方法延迟指定时间，单位为毫秒
+3. 利用循环获取CPU时钟的方法延迟指定时间，单位为毫秒
 void CSplitScreenServerDlg::cmDelay(int ms)
 {
     LARGE_INTEGER litmp;
@@ -57,7 +57,7 @@ void CSplitScreenServerDlg::cmDelay(int ms)
     }while(dfTim<0.001*ms);   //精确到1ms
 }
 
-4.    IMediaDet抓取视频帧
+4. IMediaDet抓取视频帧
     HRESULT hr;
 
     CoCreateInstance(CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void **)&m_pDet);
@@ -114,7 +114,7 @@ void CSplitScreenServerDlg::cmDelay(int ms)
     m_pDet->get_FrameRate(&dVal);
     m_nFrameNums = (int)(dStreamLength*dVal);
 
-5.    MFC使用多线程
+5. MFC使用多线程
 AfxBeginThread(cmVideoThread, (void *)this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
 UINT __cdecl cmVideoThread(PVOID pParam)
 {
@@ -123,14 +123,14 @@ UINT __cdecl cmVideoThread(PVOID pParam)
     return nExitCode;
 }
 
-6.    显示BMP位图数据
+6. 显示BMP位图数据
         SetDIBitsToDevice(m_hDC, 0, 0, 
             nWidth, nHeight,
             0,0,0, nHeight,
             tempBMPBuffer,pInfo,
             DIB_RGB_COLORS);
 
-7.    禁止用户拖动鼠标修改对话框大小
+7. 禁止用户拖动鼠标修改对话框大小
 LRESULT CPlayAVIDlg::OnNcHitTest(CPoint point)
 {
     int ret =CDialog::OnNcHitTest(point);
@@ -143,7 +143,7 @@ if(HTTOP ==ret || HTBOTTOM == ret || HTLEFT == ret || HTRIGHT == ret
     return CDialogEx::OnNcHitTest(point);
 }
 
-8.    VS2010并行计算
+8. VS2010并行计算
 //头文件
 #include <ppl.h>
 using namespace Concurrency;
@@ -156,7 +156,7 @@ using namespace Concurrency;
 TCHAR szTemp[101];
 GetModuleFileName(NULL, szTemp, 100);
 
-10.    将字符串资源的数据加载到数组中
+10. 将字符串资源的数据加载到数组中
     HMODULE hModule = AfxGetInstanceHandle();    //GetModuleHandle(NULL);
     HRSRC hres = FindResource(hModule, MAKEINTRESOURCE(IDR_RCDATA_EFFECT), RT_RCDATA);
     HGLOBAL hGlobal = LoadResource(hModule, hres);
@@ -165,7 +165,7 @@ GetModuleFileName(NULL, szTemp, 100);
     BYTE *pBuffer = new BYTE[dwSize];
     CopyMemory(pBuffer, pRes, dwSize);
 
-11.    Win32 API 写文件
+11. Win32 API 写文件
     HANDLE hFile;
     DeleteFile(TEXT("D:\\Effect.encrypt"));
     hFile = CreateFile(TEXT("D:\\Effect.encrypt"),
@@ -179,12 +179,12 @@ GetModuleFileName(NULL, szTemp, 100);
     WriteFile(hFile, pBuffer, dwSize, &dwWritten, NULL);
     CloseHandle(hFile);
 
-12.    DLL中创建窗口
+12. DLL中创建窗口
   m_hWnd = CreateWindow("STATIC", "Play Window", WS_POPUP | WS_VISIBLE,
                             0, 0, _frame_width, _frame_height, 
 (HWND)NULL, (HMENU)NULL,
                              (HINSTANCE)NULL, (LPARAM)0);
-13.    指定Video Render渲染到Picture控件
+13. 指定Video Render渲染到Picture控件
     IVideoWindow *p_video_window = NULL;
     hr = mp_graph->QueryInterface(IID_IVideoWindow, ( void** )&p_video_window );
     if( FAILED( hr ) ) { goto done; }
@@ -196,7 +196,7 @@ GetModuleFileName(NULL, szTemp, 100);
     p_cwnd->GetClientRect( &rect );
 p_video_window->SetWindowPosition( 0, 0, rect.right, rect.bottom );
 
-14.    初始化Picture控件为黑色
+14. 初始化Picture控件为黑色
 //在OnPaint中调用此函数。
 fill_picture_control_black()
 {
@@ -209,7 +209,7 @@ fill_picture_control_black()
     pDC->FillRect( rect, &blackBrush );
 }
 
-15.    Filter查询自定义接口
+15. Filter查询自定义接口
 NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     CheckPointer(ppv, E_POINTER);
@@ -228,7 +228,7 @@ NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 }
 注意：此处必须使用static_cast，不能使用reinterpret_cast
 
-16.    查找filter指定方向的Pin，返回第一个符合要求的pin。
+16. 查找filter指定方向的Pin，返回第一个符合要求的pin。
 HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTION find_dir)
 {
     if(NULL==base_filter) {
@@ -281,7 +281,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     fclose(stdin);
     FreeConsole();
 
-18.    在DLL或应用程序中截获某窗口的消息，且消息可以继续传给默认窗口函数
+18. 在DLL或应用程序中截获某窗口的消息，且消息可以继续传给默认窗口函数
         //传递当前类的指针
         SetWindowLong(_play_window, GWL_USERDATA, reinterpret_cast<long>(this));
         //设置处理截获的消息的新窗口函数
@@ -298,7 +298,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         return this_player->processHwndMsg(hWnd, uID, wParam, lParam);
     }
 
-19.    指定窗口接收DirectShow graph builder的事件
+19. 指定窗口接收DirectShow graph builder的事件
     (1) 声明graph的消息宏
     #define WM_GRAPHNOTIFY WM_APP+139
     (2) 定义graph消息的处理函数
@@ -331,7 +331,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     (5) 释放graph之前停止接收Graph事件
         _media_event->SetNotifyWindow(NULL, 0, 0);
         
-20.    在代码中注册COM动态链接库
+20. 在代码中注册COM动态链接库
     HKEY key_value = NULL;
     //XD Source filter.
     if(ERROR_SUCCESS != RegOpenKeyEx(HKEY_CLASSES_ROOT,
@@ -371,7 +371,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     wchar_t strWideChar = new wchar_t[size];
     MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, strWideChar, size);
     
-23.    Win32 API 文件与路径是否存在的判断方法
+23. Win32 API 文件与路径是否存在的判断方法
     路径判断
     PathIsDirectory(path);
     文件判断
@@ -381,7 +381,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         FindClose(find_file);
     }
     
-24.    使用多媒体定时器
+24. 使用多媒体定时器
     #include <MMSystem.h>
     #pragma comment(lib, "winmm.lib")
     //定义精度和延时，单位为毫秒
@@ -416,7 +416,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         //做相关处理
     }
     
-25.    禁用拷贝构造函数
+25. 禁用拷贝构造函数
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)\
     TypeName(const TypeName&);            \
     void operator=(const TypeName&)
@@ -489,3 +489,60 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         fHandle = CreateSemaphore(nullptr, fInitial, 0xFFFF, nullptr);
     }
 	
+28. 自动锁
+    //临界区封装
+    class SectionLock {
+    private:
+        // make copy constructor and assignment operator inaccessible
+        SectionLock(const SectionLock &refCritSec);
+        SectionLock &operator=(const SectionLock &refCritSec);
+        CRITICAL_SECTION _critical_section;
+    public:
+        SectionLock() {
+            InitializeCriticalSection(&_critical_section);
+        };
+
+        ~SectionLock() {
+            DeleteCriticalSection(&_critical_section);
+        };
+
+        void Lock() {
+            EnterCriticalSection(&_critical_section);
+        };
+
+        void Unlock() {
+            LeaveCriticalSection(&_critical_section);
+        };
+    };
+    //使用封装临界区的自动锁
+    class AutoLock {
+    private:
+        // make copy constructor and assignment operator inaccessible
+        AutoLock(const AutoLock &refAutoLock);
+        AutoLock &operator=(const AutoLock &refAutoLock);
+    protected:
+        SectionLock * _section_lock;
+    public:
+        AutoLock(SectionLock * plock) {
+            _section_lock = plock;
+            _section_lock->Lock();
+        };
+        ~AutoLock() {
+            _section_lock->Unlock();
+        };
+    };
+29. 获得Jpeg文件或流的宽高信息
+    //获得JPEG包的宽高信息
+	BYTE *frame_buffer = NULL;
+	int frame_size = 0;
+	/* 获得frame_buffer与frame_size代码省略*/
+    int temp_width=0, temp_height=0;
+    for(int i=0; i<(frame_size-9); ++i) {
+        if(0xff == *(frame_buffer+i)) {
+            if(0xc0 == *(frame_buffer+i+1) && (i+8)<frame_size) {
+                int high_byte=0, low_byte=0;
+                temp_height = *(frame_buffer+i+5) * 256 + *(frame_buffer+i+6);
+                temp_width = *(frame_buffer+i+7) * 256 + *(frame_buffer+i+8);
+            }
+        }
+    }
