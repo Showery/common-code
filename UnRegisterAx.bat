@@ -1,4 +1,5 @@
 cd /d %~dp0
+
 :: -----------UnRegister XD source filter.------------
 regsvr32 -u -s XDSource.ax
 del XDSource.ax /f /q
@@ -6,9 +7,12 @@ del XDSource.ax /f /q
 :: ----------UnRegister Core AVC Decoder.----------
 regsvr32 -u -s CoreAVCDecoder.ax
 del CoreAVCDecoder.ax /f /q
-
 :: -----UnRegistry information about  CoreAVCDecoder.------
 REG DELETE HKLM\SOFTWARE\CoreCodec /f
+
+:: ----------UnRegister XD MJPEG Decoder.----------
+regsvr32 -u -s XDJpegDecoder.ax
+del XDJpegDecoder.ax /f /q
 
 :: --------------UnRegister haali dll or ax----------------
 regsvr32 -u -s avi.dll
