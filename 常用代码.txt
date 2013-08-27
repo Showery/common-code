@@ -1,4 +1,4 @@
-1. Visual Studio 2010Ê¹ÓÃDirectShow
+ï»¿1. Visual Studio 2010ä½¿ç”¨DirectShow
 #include "streams.h"
 #include "DShow.h"
 #pragma include_alias( "dxtrans.h", "qedit.h" )
@@ -8,8 +8,8 @@
 #define __IDxtKey_INTERFACE_DEFINED__
 #include "qedit.h"
 
-2. °²È«ÊÍ·ÅÖ¸Õë
-ÊÍ·ÅNew³öÀ´µÄµ¥¸ö¶ÔÏó
+2. å®‰å…¨é‡Šæ”¾æŒ‡é’ˆ
+é‡Šæ”¾Newå‡ºæ¥çš„å•ä¸ªå¯¹è±¡
 template< typename T_Delete >
 void SafeDelete( T_Delete **pp )
 {
@@ -17,7 +17,7 @@ void SafeDelete( T_Delete **pp )
         delete ( *pp );
     *pp = NULL;
 }
-ÊÍ·ÅNew³öÀ´µÄÊı×é
+é‡Šæ”¾Newå‡ºæ¥çš„æ•°ç»„
 template< typename T_Delete >
 void SafeDeleteArray( T_Delete **pp)
 {
@@ -25,7 +25,7 @@ void SafeDeleteArray( T_Delete **pp)
         delete []( *pp );
     *pp = NULL;
 }
-ÊÍ·ÅCOMÖ¸Õë£¬·µ»ØÖµÎªÒıÓÃ¼ÆÊı
+é‡Šæ”¾COMæŒ‡é’ˆï¼Œè¿”å›å€¼ä¸ºå¼•ç”¨è®¡æ•°
 template< typename T_Release >
 ULONG SafeRelease( T_Release **pp )
 {
@@ -38,26 +38,26 @@ ULONG SafeRelease( T_Release **pp )
     return ret;
 }
 
-3. ÀûÓÃÑ­»·»ñÈ¡CPUÊ±ÖÓµÄ·½·¨ÑÓ³ÙÖ¸¶¨Ê±¼ä£¬µ¥Î»ÎªºÁÃë
+3. åˆ©ç”¨å¾ªç¯è·å–CPUæ—¶é’Ÿçš„æ–¹æ³•å»¶è¿ŸæŒ‡å®šæ—¶é—´ï¼Œå•ä½ä¸ºæ¯«ç§’
 void CSplitScreenServerDlg::cmDelay(int ms)
 {
     LARGE_INTEGER litmp;
     LONGLONG QPart1,QPart2;
     double dfMinus, dfFreq, dfTim; 
     QueryPerformanceFrequency(&litmp);
-    dfFreq = (double)litmp.QuadPart;// »ñµÃ¼ÆÊıÆ÷µÄÊ±ÖÓÆµÂÊ
+    dfFreq = (double)litmp.QuadPart;// è·å¾—è®¡æ•°å™¨çš„æ—¶é’Ÿé¢‘ç‡
     QueryPerformanceCounter(&litmp);
-    QPart1 = litmp.QuadPart;// »ñµÃ³õÊ¼Öµ
+    QPart1 = litmp.QuadPart;// è·å¾—åˆå§‹å€¼
     do
     {
         QueryPerformanceCounter(&litmp);
-        QPart2 = litmp.QuadPart;//»ñµÃÖĞÖ¹Öµ
+        QPart2 = litmp.QuadPart;//è·å¾—ä¸­æ­¢å€¼
         dfMinus = (double)(QPart2-QPart1);
-        dfTim = dfMinus/dfFreq;// »ñµÃ¶ÔÓ¦µÄÊ±¼äÖµ£¬µ¥Î»ÎªÃë
-    }while(dfTim<0.001*ms);   //¾«È·µ½1ms
+        dfTim = dfMinus/dfFreq;// è·å¾—å¯¹åº”çš„æ—¶é—´å€¼ï¼Œå•ä½ä¸ºç§’
+    }while(dfTim<0.001*ms);   //ç²¾ç¡®åˆ°1ms
 }
 
-4. IMediaDet×¥È¡ÊÓÆµÖ¡
+4. IMediaDetæŠ“å–è§†é¢‘å¸§
     HRESULT hr;
 
     CoCreateInstance(CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void **)&m_pDet);
@@ -80,7 +80,7 @@ void CSplitScreenServerDlg::cmDelay(int ms)
     }
     if(FALSE == bIsFoundVideo)
     {
-        MessageBox(TEXT("Î´ÕÒµ½VideoÀàĞÍ"));
+        MessageBox(TEXT("æœªæ‰¾åˆ°Videoç±»å‹"));
         return;
     }
 
@@ -114,7 +114,7 @@ void CSplitScreenServerDlg::cmDelay(int ms)
     m_pDet->get_FrameRate(&dVal);
     m_nFrameNums = (int)(dStreamLength*dVal);
 
-5. MFCÊ¹ÓÃ¶àÏß³Ì
+5. MFCä½¿ç”¨å¤šçº¿ç¨‹
 AfxBeginThread(cmVideoThread, (void *)this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
 UINT __cdecl cmVideoThread(PVOID pParam)
 {
@@ -123,14 +123,14 @@ UINT __cdecl cmVideoThread(PVOID pParam)
     return nExitCode;
 }
 
-6. ÏÔÊ¾BMPÎ»Í¼Êı¾İ
+6. æ˜¾ç¤ºBMPä½å›¾æ•°æ®
         SetDIBitsToDevice(m_hDC, 0, 0, 
             nWidth, nHeight,
             0,0,0, nHeight,
             tempBMPBuffer,pInfo,
             DIB_RGB_COLORS);
 
-7. ½ûÖ¹ÓÃ»§ÍÏ¶¯Êó±êĞŞ¸Ä¶Ô»°¿ò´óĞ¡
+7. ç¦æ­¢ç”¨æˆ·æ‹–åŠ¨é¼ æ ‡ä¿®æ”¹å¯¹è¯æ¡†å¤§å°
 LRESULT CPlayAVIDlg::OnNcHitTest(CPoint point)
 {
     int ret =CDialog::OnNcHitTest(point);
@@ -143,20 +143,20 @@ if(HTTOP ==ret || HTBOTTOM == ret || HTLEFT == ret || HTRIGHT == ret
     return CDialogEx::OnNcHitTest(point);
 }
 
-8. VS2010²¢ĞĞ¼ÆËã
-//Í·ÎÄ¼ş
+8. VS2010å¹¶è¡Œè®¡ç®—
+//å¤´æ–‡ä»¶
 #include <ppl.h>
 using namespace Concurrency;
 
-//Ê¹ÓÃ
+//ä½¿ç”¨
     parallel_for(0, nMAX, [&](int i)
     {});
 
-9.    »ñµÃµ±Ç°Ä£¿éËùÔÚÄ¿Â¼
+9.    è·å¾—å½“å‰æ¨¡å—æ‰€åœ¨ç›®å½•
 TCHAR szTemp[101];
 GetModuleFileName(NULL, szTemp, 100);
 
-10. ½«×Ö·û´®×ÊÔ´µÄÊı¾İ¼ÓÔØµ½Êı×éÖĞ
+10. å°†å­—ç¬¦ä¸²èµ„æºçš„æ•°æ®åŠ è½½åˆ°æ•°ç»„ä¸­
     HMODULE hModule = AfxGetInstanceHandle();    //GetModuleHandle(NULL);
     HRSRC hres = FindResource(hModule, MAKEINTRESOURCE(IDR_RCDATA_EFFECT), RT_RCDATA);
     HGLOBAL hGlobal = LoadResource(hModule, hres);
@@ -165,7 +165,7 @@ GetModuleFileName(NULL, szTemp, 100);
     BYTE *pBuffer = new BYTE[dwSize];
     CopyMemory(pBuffer, pRes, dwSize);
 
-11. Win32 API Ğ´ÎÄ¼ş
+11. Win32 API å†™æ–‡ä»¶
     HANDLE hFile;
     DeleteFile(TEXT("D:\\Effect.encrypt"));
     hFile = CreateFile(TEXT("D:\\Effect.encrypt"),
@@ -179,12 +179,12 @@ GetModuleFileName(NULL, szTemp, 100);
     WriteFile(hFile, pBuffer, dwSize, &dwWritten, NULL);
     CloseHandle(hFile);
 
-12. DLLÖĞ´´½¨´°¿Ú
+12. DLLä¸­åˆ›å»ºçª—å£
   m_hWnd = CreateWindow("STATIC", "Play Window", WS_POPUP | WS_VISIBLE,
                             0, 0, _frame_width, _frame_height, 
 (HWND)NULL, (HMENU)NULL,
                              (HINSTANCE)NULL, (LPARAM)0);
-13. Ö¸¶¨Video RenderäÖÈ¾µ½Picture¿Ø¼ş
+13. æŒ‡å®šVideo Renderæ¸²æŸ“åˆ°Pictureæ§ä»¶
     IVideoWindow *p_video_window = NULL;
     hr = mp_graph->QueryInterface(IID_IVideoWindow, ( void** )&p_video_window );
     if( FAILED( hr ) ) { goto done; }
@@ -196,8 +196,8 @@ GetModuleFileName(NULL, szTemp, 100);
     p_cwnd->GetClientRect( &rect );
 p_video_window->SetWindowPosition( 0, 0, rect.right, rect.bottom );
 
-14. ³õÊ¼»¯Picture¿Ø¼şÎªºÚÉ«
-//ÔÚOnPaintÖĞµ÷ÓÃ´Ëº¯Êı¡£
+14. åˆå§‹åŒ–Pictureæ§ä»¶ä¸ºé»‘è‰²
+//åœ¨OnPaintä¸­è°ƒç”¨æ­¤å‡½æ•°ã€‚
 fill_picture_control_black()
 {
     CWnd *p_picture_wnd = GetDlgItem( IDC_STATIC_PREVIEW );
@@ -209,7 +209,7 @@ fill_picture_control_black()
     pDC->FillRect( rect, &blackBrush );
 }
 
-15. Filter²éÑ¯×Ô¶¨Òå½Ó¿Ú
+15. FilteræŸ¥è¯¢è‡ªå®šä¹‰æ¥å£
 NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     CheckPointer(ppv, E_POINTER);
@@ -226,9 +226,9 @@ NonDelegatingQueryInterface(REFIID riid, void ** ppv)
         return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
     }
 }
-×¢Òâ£º´Ë´¦±ØĞëÊ¹ÓÃstatic_cast£¬²»ÄÜÊ¹ÓÃreinterpret_cast
+æ³¨æ„ï¼šæ­¤å¤„å¿…é¡»ä½¿ç”¨static_castï¼Œä¸èƒ½ä½¿ç”¨reinterpret_cast
 
-16. ²éÕÒfilterÖ¸¶¨·½ÏòµÄPin£¬·µ»ØµÚÒ»¸ö·ûºÏÒªÇóµÄpin¡£
+16. æŸ¥æ‰¾filteræŒ‡å®šæ–¹å‘çš„Pinï¼Œè¿”å›ç¬¬ä¸€ä¸ªç¬¦åˆè¦æ±‚çš„pinã€‚
 HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTION find_dir)
 {
     if(NULL==base_filter) {
@@ -246,7 +246,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     IPin *temp_pin = NULL;
     enum_pins->Reset();
     while(SUCCEEDED(enum_pins->Next(1, &temp_pin, NULL))) {
-        //·ÀÖ¹ÒâÍâ´íÎó·¢Éú
+        //é˜²æ­¢æ„å¤–é”™è¯¯å‘ç”Ÿ
         if(NULL==temp_pin) break;
         PIN_DIRECTION pin_dir;
         temp_pin->QueryDirection(&pin_dir);
@@ -271,26 +271,26 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         return S_OK;
 }
 
-17. ÔÚDLLÖĞ´´½¨ºÍÉ¾³ıÒ»¸ö¿ØÖÆÌ¨
-    //´´½¨¿ØÖÆÌ¨£¬´ò¿ªÊäÈëÊä³ö
+17. åœ¨DLLä¸­åˆ›å»ºå’Œåˆ é™¤ä¸€ä¸ªæ§åˆ¶å°
+    //åˆ›å»ºæ§åˆ¶å°ï¼Œæ‰“å¼€è¾“å…¥è¾“å‡º
     AllocConsole();
     freopen("CONOUT$", "w+t", stdout);
     freopen("CONIN$", "r+t", stdin);
-    //¹Ø±ÕÊäÈëÊä³ö£¬ÊÍ·Å¿ØÖÆÌ¨
+    //å…³é—­è¾“å…¥è¾“å‡ºï¼Œé‡Šæ”¾æ§åˆ¶å°
         fclose(stdout);
     fclose(stdin);
     FreeConsole();
 
-18. ÔÚDLL»òÓ¦ÓÃ³ÌĞòÖĞ½Ø»ñÄ³´°¿ÚµÄÏûÏ¢£¬ÇÒÏûÏ¢¿ÉÒÔ¼ÌĞø´«¸øÄ¬ÈÏ´°¿Úº¯Êı
-        //´«µİµ±Ç°ÀàµÄÖ¸Õë
+18. åœ¨DLLæˆ–åº”ç”¨ç¨‹åºä¸­æˆªè·æŸçª—å£çš„æ¶ˆæ¯ï¼Œä¸”æ¶ˆæ¯å¯ä»¥ç»§ç»­ä¼ ç»™é»˜è®¤çª—å£å‡½æ•°
+        //ä¼ é€’å½“å‰ç±»çš„æŒ‡é’ˆ
         SetWindowLong(_play_window, GWL_USERDATA, reinterpret_cast<long>(this));
-        //ÉèÖÃ´¦Àí½Ø»ñµÄÏûÏ¢µÄĞÂ´°¿Úº¯Êı
-        //²¢»ñµÃ¾É´°¿Úº¯Êı¾ä±ú
-        //ÒÔ±ãĞÂ´°¿Úº¯Êı´¦ÀíÍêÏûÏ¢Ö®ºó¼ÌĞøÖ´ĞĞ¾É´°¿Úº¯Êı´¦ÀíÏûÏ¢
+        //è®¾ç½®å¤„ç†æˆªè·çš„æ¶ˆæ¯çš„æ–°çª—å£å‡½æ•°
+        //å¹¶è·å¾—æ—§çª—å£å‡½æ•°å¥æŸ„
+        //ä»¥ä¾¿æ–°çª—å£å‡½æ•°å¤„ç†å®Œæ¶ˆæ¯ä¹‹åç»§ç»­æ‰§è¡Œæ—§çª—å£å‡½æ•°å¤„ç†æ¶ˆæ¯
         long ret = SetWindowLong(_play_window, GWL_WNDPROC, reinterpret_cast<long>(SubWndProc));
         
-        //Ê¹ÓÃ¶ÔÏóÖ¸Õëµ÷ÓÃ¶ÔÏóµÄº¯Êı
-        //ÒÔ±ã²Ù×÷Àà¶ÔÏóµÄ³ÉÔ±±äÁ¿
+        //ä½¿ç”¨å¯¹è±¡æŒ‡é’ˆè°ƒç”¨å¯¹è±¡çš„å‡½æ•°
+        //ä»¥ä¾¿æ“ä½œç±»å¯¹è±¡çš„æˆå‘˜å˜é‡
         LRESULT SubWndProc(HWND hWnd, int uID, WPARAM wParam, LPARAM lParam)
     {
         long user_data = GetWindowLong(hWnd, GWL_USERDATA);
@@ -298,29 +298,29 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         return this_player->processHwndMsg(hWnd, uID, wParam, lParam);
     }
 
-19. Ö¸¶¨´°¿Ú½ÓÊÕDirectShow graph builderµÄÊÂ¼ş
-    (1) ÉùÃ÷graphµÄÏûÏ¢ºê
+19. æŒ‡å®šçª—å£æ¥æ”¶DirectShow graph builderçš„äº‹ä»¶
+    (1) å£°æ˜graphçš„æ¶ˆæ¯å®
     #define WM_GRAPHNOTIFY WM_APP+139
-    (2) ¶¨ÒågraphÏûÏ¢µÄ´¦Àíº¯Êı
+    (2) å®šä¹‰graphæ¶ˆæ¯çš„å¤„ç†å‡½æ•°
     HRESULT processGraphEvent()
     {
-        //_media_eventÎªIMediaEventExÀàĞÍµÄ³ÉÔ±±äÁ¿
-        //´Ë´¦¼ÙÉèÒÑ¾­³É¹¦´ÓGraph builder»ñÈ¡µ½
+        //_media_eventä¸ºIMediaEventExç±»å‹çš„æˆå‘˜å˜é‡
+        //æ­¤å¤„å‡è®¾å·²ç»æˆåŠŸä»Graph builderè·å–åˆ°
         if(NULL==_media_event) { return S_OK; }
         long event_code=0, param1=0, param2=0;
         HRESULT hr = S_OK;
         hr = _media_event->GetEvent(&event_code, &param1, &param2);
         if(SUCCESS(hr)) {
-            //ÔÚ´Ë´¦Ö´ĞĞ¶ÔÊÂ¼şµÄ´¦Àí
+            //åœ¨æ­¤å¤„æ‰§è¡Œå¯¹äº‹ä»¶çš„å¤„ç†
         }
         return hr;
     }
-    (3) ÔÚ´°¿ÚÏìÓ¦º¯ÊıÖĞÌí¼Ó¶ÔWM_GRAPHNOTIFYµÄÏìÓ¦
+    (3) åœ¨çª—å£å“åº”å‡½æ•°ä¸­æ·»åŠ å¯¹WM_GRAPHNOTIFYçš„å“åº”
     case WM_GRAPHNOTIFY:
         processGraphEvent();
         break;
-    (4) Render graphÖ®ºó´Ógraph builder»ñÈ¡IMediaEventEx
-        ²¢ÉèÖÃÊÂ¼ş½ÓÊÕ´°¿Ú
+    (4) Render graphä¹‹åä»graph builderè·å–IMediaEventEx
+        å¹¶è®¾ç½®äº‹ä»¶æ¥æ”¶çª—å£
         hr = _graph_builder->QueryInterface(
         IID_IMediaEventEX,
         reinterpret_cast<void**>(&_media_event));
@@ -328,10 +328,10 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
             hr = _media_event->SetNotifyWindow(
             reinterpret_cast<OAHWND>(hwnd), WM_GRAPHNOTIFY, 0);
         }
-    (5) ÊÍ·ÅgraphÖ®Ç°Í£Ö¹½ÓÊÕGraphÊÂ¼ş
+    (5) é‡Šæ”¾graphä¹‹å‰åœæ­¢æ¥æ”¶Graphäº‹ä»¶
         _media_event->SetNotifyWindow(NULL, 0, 0);
         
-20. ÔÚ´úÂëÖĞ×¢²áCOM¶¯Ì¬Á´½Ó¿â
+20. åœ¨ä»£ç ä¸­æ³¨å†ŒCOMåŠ¨æ€é“¾æ¥åº“
     HKEY key_value = NULL;
     //XD Source filter.
     if(ERROR_SUCCESS != RegOpenKeyEx(HKEY_CLASSES_ROOT,
@@ -350,7 +350,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     RegCloseKey(key_value);
     key_value = NULL;
     
-21. MFC Unicode±àÂë¸ñÊ½ÏÂ´ò¿ªÎÄ¼ş²¢½«ÎÄ¼şÃû×ª»»Îªchar*
+21. MFC Unicodeç¼–ç æ ¼å¼ä¸‹æ‰“å¼€æ–‡ä»¶å¹¶å°†æ–‡ä»¶åè½¬æ¢ä¸ºchar*
     char *file_path = NULL;
     CFileDialog file_dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
                                         TEXT("MP4 Files(*.MP4)|*.mp4|All Files(*.*)|*.*||"));
@@ -365,35 +365,35 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     WideCharToMultiByte(CP_OEMCP, NULL, wszPath, -1, file_path, dwNum, NULL, FALSE);
     SafeDelete(&file_path);
     
-22. char*×ªwchar_t*(WCHAR*)
+22. char*è½¬wchar_t*(WCHAR*)
     char strMulByte[50] = "Just a test."
     DWORD size = MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, NULL, 0);
     wchar_t strWideChar = new wchar_t[size];
     MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, strWideChar, size);
     
-23. Win32 API ÎÄ¼şÓëÂ·¾¶ÊÇ·ñ´æÔÚµÄÅĞ¶Ï·½·¨
-    Â·¾¶ÅĞ¶Ï
+23. Win32 API æ–‡ä»¶ä¸è·¯å¾„æ˜¯å¦å­˜åœ¨çš„åˆ¤æ–­æ–¹æ³•
+    è·¯å¾„åˆ¤æ–­
     PathIsDirectory(path);
-    ÎÄ¼şÅĞ¶Ï
+    æ–‡ä»¶åˆ¤æ–­
     WIN32_FIND_DATA find_file_data;
     HANDLE find_file = FindFirstFile(file_path, &find_file_data);
-    if(INVALID_HANDLE_VALUE != find_file) {    //ÎÄ¼ş´æÔÚ
+    if(INVALID_HANDLE_VALUE != find_file) {    //æ–‡ä»¶å­˜åœ¨
         FindClose(find_file);
     }
     
-24. Ê¹ÓÃ¶àÃ½Ìå¶¨Ê±Æ÷
+24. ä½¿ç”¨å¤šåª’ä½“å®šæ—¶å™¨
     #include <MMSystem.h>
     #pragma comment(lib, "winmm.lib")
-    //¶¨Òå¾«¶ÈºÍÑÓÊ±£¬µ¥Î»ÎªºÁÃë
+    //å®šä¹‰ç²¾åº¦å’Œå»¶æ—¶ï¼Œå•ä½ä¸ºæ¯«ç§’
     const int TIMER_PRECISION = 5;
     const int TIMER_DELAY = 500;
-    //¶¨Ê±Æ÷»Øµ÷º¯Êı
+    //å®šæ—¶å™¨å›è°ƒå‡½æ•°
     void CALLBACK handleTimer(UINT id, UINT msg, DWORD dwUser, DWORD dw1, DWORD dw2)
     {
         ClassName *this_class = reinterpret_cast<ClassName*>(dwUser);
         this_class->processTimer();
     }
-    //´´½¨¶¨Ê±Æ÷
+    //åˆ›å»ºå®šæ—¶å™¨
     void ClassName::createTimer()
     {
         timeBeginPeriod(TIMER_PRECISION);
@@ -402,7 +402,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         processTimer, reinterpret_cast<DWORD_PTR>(this), TIME_PERIODIC);
         _is_timer_on = true;
     }
-    //Ïú»Ù¶¨Ê±Æ÷
+    //é”€æ¯å®šæ—¶å™¨
     void ClassName::destroyTimer()
     {
         if(_is_timer_on) {
@@ -413,39 +413,39 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     }
     void ClassName::processTimer()
     {
-        //×öÏà¹Ø´¦Àí
+        //åšç›¸å…³å¤„ç†
     }
     
-25. ½ûÓÃ¿½±´¹¹Ôìº¯Êı
+25. ç¦ç”¨æ‹·è´æ„é€ å‡½æ•°
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)\
     TypeName(const TypeName&);            \
     void operator=(const TypeName&)
     
-26. ¼ÆËãÊ±¼ä²î
-    ·½·¨Ò»£º
+26. è®¡ç®—æ—¶é—´å·®
+    æ–¹æ³•ä¸€ï¼š
     LARGE_INTEGER litmp;
     LONGLONG QPart1,QPart2;
     double dfMinus, dfFreq, dfTime; 
     QueryPerformanceFrequency(&litmp);
-    dfFreq = (double)litmp.QuadPart;// »ñµÃ¼ÆÊıÆ÷µÄÊ±ÖÓÆµÂÊ
+    dfFreq = (double)litmp.QuadPart;// è·å¾—è®¡æ•°å™¨çš„æ—¶é’Ÿé¢‘ç‡
     QueryPerformanceCounter(&litmp);
-    QPart1 = litmp.QuadPart;// »ñµÃ³õÊ¼Öµ
-    /*****´úÂëÖ´ĞĞ²¿·Ö*****/
+    QPart1 = litmp.QuadPart;// è·å¾—åˆå§‹å€¼
+    /*****ä»£ç æ‰§è¡Œéƒ¨åˆ†*****/
     QueryPerformanceCounter(&litmp);
-    QPart2 = litmp.QuadPart;//»ñµÃ½áÊøÖµ
+    QPart2 = litmp.QuadPart;//è·å¾—ç»“æŸå€¼
     dfMinus = static_cast<double>(QPart2 - QPart1);
-    dfTime = dfMinus * 1000.0 /dfFreq; //»ñµÃÊ±¼ä²î£¬µ¥Î»ÎªºÁÃë
-    ·½·¨¶ş£º
+    dfTime = dfMinus * 1000.0 /dfFreq; //è·å¾—æ—¶é—´å·®ï¼Œå•ä½ä¸ºæ¯«ç§’
+    æ–¹æ³•äºŒï¼š
     DWORD begin_time, end_time;
     timeBeginPeriod(1);
     begin_time = timeGetTime();
-    /*****´úÂëÖ´ĞĞ²¿·Ö*****/
+    /*****ä»£ç æ‰§è¡Œéƒ¨åˆ†*****/
     end_time = timeGetTime();
     end_time -= begin_time;
     timeEndPeriod(1);
 	
-27. ĞÅºÅÁ¿·â×°
-    //ÉùÃ÷semaphoreÀà
+27. ä¿¡å·é‡å°è£…
+    //å£°æ˜semaphoreç±»
     class semaphore
     {
     public:
@@ -459,7 +459,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         int fInitial;
         HANDLE fHandle;
     };
-    //ÊµÏÖsemaphoreÀà
+    //å®ç°semaphoreç±»
     semaphore::semaphore(int val)
         : fInitial(val)
     {
@@ -489,8 +489,8 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         fHandle = CreateSemaphore(nullptr, fInitial, 0xFFFF, nullptr);
     }
 	
-28. ×Ô¶¯Ëø
-    //ÁÙ½çÇø·â×°
+28. è‡ªåŠ¨é”
+    //ä¸´ç•ŒåŒºå°è£…
     class SectionLock {
     private:
         // make copy constructor and assignment operator inaccessible
@@ -514,7 +514,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
             LeaveCriticalSection(&_critical_section);
         };
     };
-    //Ê¹ÓÃ·â×°ÁÙ½çÇøµÄ×Ô¶¯Ëø
+    //ä½¿ç”¨å°è£…ä¸´ç•ŒåŒºçš„è‡ªåŠ¨é”
     class AutoLock {
     private:
         // make copy constructor and assignment operator inaccessible
@@ -531,11 +531,11 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
             _section_lock->Unlock();
         };
     };
-29. »ñµÃJpegÎÄ¼ş»òÁ÷µÄ¿í¸ßĞÅÏ¢
-    //»ñµÃJPEG°üµÄ¿í¸ßĞÅÏ¢
+29. è·å¾—Jpegæ–‡ä»¶æˆ–æµçš„å®½é«˜ä¿¡æ¯
+    //è·å¾—JPEGåŒ…çš„å®½é«˜ä¿¡æ¯
 	BYTE *frame_buffer = NULL;
 	int frame_size = 0;
-	/* »ñµÃframe_bufferÓëframe_size´úÂëÊ¡ÂÔ*/
+	/* è·å¾—frame_bufferä¸frame_sizeä»£ç çœç•¥*/
     int temp_width=0, temp_height=0;
     for(int i=0; i<(frame_size-9); ++i) {
         if(0xff == *(frame_buffer+i)) {
@@ -546,3 +546,200 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
             }
         }
     }
+	
+30. ä¿å­˜bmpæ–‡ä»¶æ–¹æ³•
+bool saveToBMP(unsigned char *image_buffer, BITMAPINFOHEADER *info_header, const char *path)
+{
+    if(NULL==path ||
+        NULL==image_buffer ||
+        NULL==info_header) {
+            return false;
+    }
+    if(XD_ImageBMP != decideImageType(path)) {
+        return false;
+    }
+
+    //åˆå§‹åŒ–æ–‡ä»¶ä¿¡æ¯å¤´
+    BITMAPFILEHEADER file_header;
+    int bit_count = 0;
+    if(info_header->biBitCount <= 8) bit_count = 1<<info_header->biBitCount;
+    memset(&file_header, 0, sizeof(file_header));
+    file_header.bfType = static_cast<DWORD>(('M' << 8) | 'B');
+    file_header.bfSize = sizeof(file_header) + sizeof(BITMAPINFOHEADER) +
+        bit_count*sizeof(RGBQUAD) +info_header->biSizeImage;
+    file_header.bfReserved1 = 0;
+    file_header.bfReserved2 = 0;
+    file_header.bfOffBits = static_cast<DWORD>(sizeof(BITMAPINFOHEADER)
+        + sizeof(BITMAPFILEHEADER));
+    //å†™å…¥æ–‡ä»¶
+    FILE *file_handle = NULL;
+    fopen_s(&file_handle, path, "wb");
+    if(NULL==file_handle) {
+        return false;
+    }
+    fwrite(&file_header, 1, sizeof(BITMAPFILEHEADER), file_handle);
+    fwrite(info_header, 1, sizeof(*info_header), file_handle);
+    fwrite(image_buffer, 1, info_header->biSizeImage, file_handle);
+    fclose(file_handle);
+
+    return true;
+}
+
+31. libjpegå†™æ–‡ä»¶æ–¹æ³•
+//libjpeg
+#include <stdio.h>
+#include <stdlib.h>
+#include "libjpeg/jpeglib.h"
+#pragma comment(lib, "libjpeg.lib")
+
+bool ImageSaver::saveToJPG(unsigned char *image_buffer, BITMAPINFOHEADER *info_header, const char *path)
+{
+    if(NULL==path ||
+        NULL==image_buffer ||
+        NULL==info_header) {
+            return false;
+    }
+    if(XD_ImageJPG != decideImageType(path)) {
+        return false;
+    }
+
+    //æ‰“å¼€ç›®æ ‡æ–‡ä»¶
+    FILE *file_handle = NULL;
+    fopen_s(&file_handle, path, "wb");
+    if(NULL == file_handle) return false;
+
+    //å›¾åƒç›¸å…³ä¿¡æ¯
+    int width = info_header->biWidth;
+    int height = info_header->biHeight;
+    int pixel_bytes = info_header->biBitCount / 8;
+    int stride = info_header->biSizeImage / height;
+
+    //libjpegç›¸å…³å˜é‡
+    jpeg_compress_struct compress_info;
+    jpeg_error_mgr jpeg_error;
+    JSAMPROW pic_line;
+
+    //åˆå§‹åŒ–libjpegå˜é‡
+    compress_info.err = jpeg_std_error(&jpeg_error);
+    jpeg_create_compress(&compress_info);
+    jpeg_stdio_dest(&compress_info, (FILE*)file_handle);
+    compress_info.image_width = width;
+    compress_info.image_height = height;
+    compress_info.input_components =  3;
+    compress_info.in_color_space = JCS_RGB;
+    jpeg_set_defaults(&compress_info);
+    jpeg_set_quality(&compress_info, 100, true);
+
+    //å¼€å§‹å‹ç¼©bmpä½å›¾å¹¶å†™å…¥jpgæ–‡ä»¶
+    jpeg_start_compress(&compress_info, true);
+    int i = 0;
+    //ä¿å­˜jpegæ–‡ä»¶ï¼Œæ— é€æ˜ä¿¡æ¯
+    pic_line = new JSAMPLE[width*3];
+    while(compress_info.next_scanline < compress_info.image_height) {
+        //RGBé¡ºåºéœ€è¦é¢ å€’
+        for(int j=0; j<width; ++j) {
+            pic_line[j*3+0] = *(image_buffer+(height-i-1)*stride+j*pixel_bytes+2);
+            pic_line[j*3+1] = *(image_buffer+(height-i-1)*stride+j*pixel_bytes+1);
+            pic_line[j*3+2] = *(image_buffer+(height-i-1)*stride+j*pixel_bytes+0);
+        }
+        ++i;
+        jpeg_write_scanlines(&compress_info, &pic_line, 1);
+    }
+    SafeDeleteArray(&pic_line);
+    jpeg_finish_compress(&compress_info);
+    jpeg_destroy_compress(&compress_info);
+
+    fclose(file_handle);
+    return true;
+}
+
+32. libpngå†™æ–‡ä»¶æ–¹æ³•
+//libpng
+#include <stdio.h>
+#include <setjmp.h>
+#include "libpng/png.h"
+#pragma comment(lib, "zlib.lib")
+#pragma comment(lib, "libpng.lib")
+#include <stdlib.h>
+
+bool saveToPNG(unsigned char *image_buffer, BITMAPINFOHEADER *info_header, const char *path)
+{
+    if(NULL==path ||
+        NULL==image_buffer ||
+        NULL==info_header) {
+            return false;
+    }
+    if(XD_ImagePNG != decideImageType(path)) {
+        return false;
+    }
+    bool ret = false;
+
+    //æ‰“å¼€ç›®æ ‡æ–‡ä»¶
+    FILE *file_handle = NULL;
+    fopen_s(&file_handle, path, "wb");
+    if(NULL == file_handle) return false;
+
+    //libpngç›¸å…³å˜é‡
+    png_struct *pic_ptr = NULL;
+    png_info *pic_info_ptr = NULL;
+    png_bytep *pic_datas = NULL;
+    
+    //å›¾åƒä¿¡æ¯
+    int width = info_header->biWidth;
+    int height = info_header->biHeight;
+    int pixel_bytes = info_header->biBitCount / 8;
+    
+    int stride = info_header->biSizeImage / height;
+
+    //åˆå§‹åŒ–libpngç›¸å…³å˜é‡
+    pic_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if(NULL == pic_ptr) {
+        PRINTF_DEBUG_MSG("saveToPNG, failed to create write struct.")
+        ret = false;
+        goto done;
+    }
+    pic_info_ptr = png_create_info_struct(pic_ptr);
+    if(NULL == pic_info_ptr) {
+        PRINTF_DEBUG_MSG("saveToPNG, failed to create info struct.")
+        ret = false;
+        goto done;
+    }
+    if(setjmp(png_jmpbuf(pic_ptr))) {
+        PRINTF_DEBUG_MSG("saveToPNG, failed to create write and info struct.")
+        ret = false;
+        goto done;
+    }
+    png_init_io(pic_ptr, file_handle);
+    
+    //è‹¥åƒç´ å­—èŠ‚æ•°ä¸æ˜¯3æˆ–4ï¼Œè¿”å›é”™è¯¯
+    if(3!=pixel_bytes && 4!=pixel_bytes)  {
+        ret = false;
+        goto done;
+    }
+    //æˆªå›¾ä¸åŒ…å«é€æ˜ä¿¡æ¯ï¼Œæ•…é¢œè‰²ç©ºé—´æŒ‡å®šä¸ºRGB
+    png_set_IHDR(pic_ptr, pic_info_ptr, width, height,
+                                8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
+                                PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+    png_write_info(pic_ptr, pic_info_ptr);
+
+    //å†™å›¾åƒæ•°æ®
+    int pic_line_size = width * 3;
+    pic_datas = new png_bytep[height];
+    for(int i=0; i<height; ++i) {
+         pic_datas[i] = new png_byte[pic_line_size];
+         //å›¾åƒæ•°æ®ä¸Šä¸‹é¢ å€’ï¼Œéœ€è¦æ¢å¤ï¼›RGBé¡ºåºé¢ å€’ï¼Œéœ€è¦æ¢å¤ã€‚
+         for(int j=0; j<width; ++j) {
+             pic_datas[i][j*3+0] = *(image_buffer+(height-i-1)*stride+j*pixel_bytes+2);
+             pic_datas[i][j*3+1] = *(image_buffer+(height-i-1)*stride+j*pixel_bytes+1);
+             pic_datas[i][j*3+2] = *(image_buffer+(height-i-1)*stride+j*pixel_bytes+0);
+         }
+    }
+    png_write_image(pic_ptr, pic_datas);
+    SafeDeleteArray(&pic_datas);
+    png_write_end(pic_ptr, NULL);
+
+done:
+    png_destroy_write_struct(&pic_ptr, &pic_info_ptr);
+    fclose(file_handle);
+    return ret;
+}
