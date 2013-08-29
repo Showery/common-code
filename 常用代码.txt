@@ -743,3 +743,9 @@ done:
     fclose(file_handle);
     return ret;
 }
+
+33. 禁用自动休眠方法
+    //禁止自动休眠
+    SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
+	//恢复自动休眠
+	SetThreadExecutionState(ES_CONTINUOUS);
