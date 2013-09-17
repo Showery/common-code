@@ -135,12 +135,10 @@ LRESULT CPlayAVIDlg::OnNcHitTest(CPoint point)
 {
     int ret =CDialog::OnNcHitTest(point);
 
-if(HTTOP ==ret || HTBOTTOM == ret || HTLEFT == ret || HTRIGHT == ret
+	if(HTTOP ==ret || HTBOTTOM == ret || HTLEFT == ret || HTRIGHT == ret
         || HTBOTTOMLEFT == ret ||HTBOTTOMRIGHT == ret || HTTOPLEFT == ret || HTTOPRIGHT == ret)
         return    HTCLIENT;
-
     return    ret;
-    return CDialogEx::OnNcHitTest(point);
 }
 
 8. VS2010并行计算
@@ -399,7 +397,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         timeBeginPeriod(TIMER_PRECISION);
         _timer_ID = timeSetEvent(
         TIMER_DELAY, TIMER_PRECISION,
-        processTimer, reinterpret_cast<DWORD_PTR>(this), TIME_PERIODIC);
+        handleTimer, reinterpret_cast<DWORD_PTR>(this), TIME_PERIODIC);
         _is_timer_on = true;
     }
     //销毁定时器
@@ -408,6 +406,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         if(_is_timer_on) {
             timeKillEvent(_timer_ID);
             timeEndPeriod(TIMER_PRECISION);
+			_timer_ID = 0;
             _is_timer_on = false;
         }
     }
@@ -620,6 +619,7 @@ bool ImageSaver::saveToJPG(unsigned char *image_buffer, BITMAPINFOHEADER *info_h
     JSAMPROW pic_line;
 
     //初始化libjpeg变量
+	memset(&compress_info, 0, sizeof(compress_info));
     compress_info.err = jpeg_std_error(&jpeg_error);
     jpeg_create_compress(&compress_info);
     jpeg_stdio_dest(&compress_info, (FILE*)file_handle);
@@ -735,6 +735,9 @@ bool saveToPNG(unsigned char *image_buffer, BITMAPINFOHEADER *info_header, const
          }
     }
     png_write_image(pic_ptr, pic_datas);
+	for(int i=0; i<hieght; ++i) {
+	    SafeDeleteArray(&pic_datas[i]);
+	}
     SafeDeleteArray(&pic_datas);
     png_write_end(pic_ptr, NULL);
 
