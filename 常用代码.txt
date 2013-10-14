@@ -179,9 +179,9 @@ GetModuleFileName(NULL, szTemp, 100);
 
 12. DLL中创建窗口
   m_hWnd = CreateWindow("STATIC", "Play Window", WS_POPUP | WS_VISIBLE,
-                            0, 0, _frame_width, _frame_height, 
-(HWND)NULL, (HMENU)NULL,
-                             (HINSTANCE)NULL, (LPARAM)0);
+                        0, 0, _frame_width, _frame_height, 
+						(HWND)NULL, (HMENU)NULL,(HINSTANCE)NULL, (LPARAM)0);
+							 
 13. 指定Video Render渲染到Picture控件
     IVideoWindow *p_video_window = NULL;
     hr = mp_graph->QueryInterface(IID_IVideoWindow, ( void** )&p_video_window );
@@ -351,7 +351,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
 21. MFC Unicode编码格式下打开文件并将文件名转换为char*
     char *file_path = NULL;
     CFileDialog file_dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-                                        TEXT("MP4 Files(*.MP4)|*.mp4|All Files(*.*)|*.*||"));
+                        TEXT("MP4 Files(*.MP4)|*.mp4|All Files(*.*)|*.*||"));
     if(IDOK != file_dlg.DoModal()) {
         return;
     }
@@ -750,5 +750,11 @@ done:
 33. 禁用自动休眠方法
     //禁止自动休眠
     SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
-	//恢复自动休眠
-	SetThreadExecutionState(ES_CONTINUOUS);
+    //恢复自动休眠
+    SetThreadExecutionState(ES_CONTINUOUS);
+	
+34. 根据DirectShow的EC_VIDEO_SIZE_CHANGED事件的参数获得视频帧新宽高
+    HRESULT hr = _media_event->GetEvent(&event_code, &param1, &param2, 0);
+    //低八位为帧宽，高八位为帧高
+    _frame_width = static_cast<int>(param1&0x0000ffff);
+    _frame_height = static_cast<int>(param1&0xffff0000) >> 16;
