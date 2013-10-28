@@ -8,11 +8,19 @@ del XDSource.ax /f /q
 regsvr32 -u -s CoreAVCDecoder.ax
 del CoreAVCDecoder.ax /f /q
 :: -----UnRegistry information about  CoreAVCDecoder.------
-REG DELETE HKLM\SOFTWARE\CoreCodec /f
+if /i "%PROCESSOR_IDENTIFIER:~0,3%"=="X86" (
+    REG DELETE HKLM\SOFTWARE\CoreCodec /f
+) else (
+    REG DELETE HKLM\SOFTWARE\Wow6432Node\CoreCodec /f
+)
 
 :: ----------UnRegister XD MJPEG Decoder.----------
 regsvr32 -u -s XDJpegDecoder.ax
 del XDJpegDecoder.ax /f /q
+
+:: ----------UnRegister XD EVR Presenter.----------
+regsvr32 -u -s EVRPresenter.ax
+del EVRPresenter.ax /f /q
 
 :: --------------UnRegister haali dll or ax----------------
 regsvr32 -u -s avi.dll
