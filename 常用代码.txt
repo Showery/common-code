@@ -13,27 +13,28 @@
 template< typename T_Delete >
 void SafeDelete( T_Delete **pp )
 {
-    if ( *pp!=NULL )
-        delete ( *pp );
-    *pp = NULL;
+    if (nullptr!=pp && nullptr!=*pp) {
+        delete (*pp);
+        *pp = nullptr
+    }
 }
 释放New出来的数组
 template< typename T_Delete >
 void SafeDeleteArray( T_Delete **pp)
 {
-    if ( *pp!=NULL )
-        delete []( *pp );
-    *pp = NULL;
+    if (nullptr!=pp && nullptr!=*pp) {
+        delete [](*pp);
+        *pp = nullptr
+    }
 }
 释放COM指针，返回值为引用计数
 template< typename T_Release >
 ULONG SafeRelease( T_Release **pp )
 {
     ULONG ret = 0;
-    if ( *pp!=NULL )
-    {
-        ret = ( *pp )->Release();
-        *pp = NULL;
+    if (nullptr!=pp && nullptr!=*pp) {
+        ret = (*pp)->Release();
+        *pp = nullptr;
     }
     return ret;
 }
@@ -135,7 +136,7 @@ LRESULT CPlayAVIDlg::OnNcHitTest(CPoint point)
 {
     int ret =CDialog::OnNcHitTest(point);
 
-	if(HTTOP ==ret || HTBOTTOM == ret || HTLEFT == ret || HTRIGHT == ret
+    if(HTTOP ==ret || HTBOTTOM == ret || HTLEFT == ret || HTRIGHT == ret
         || HTBOTTOMLEFT == ret ||HTBOTTOMRIGHT == ret || HTTOPLEFT == ret || HTTOPRIGHT == ret)
         return    HTCLIENT;
     return    ret;
@@ -180,8 +181,8 @@ GetModuleFileName(NULL, szTemp, 100);
 12. DLL中创建窗口
   m_hWnd = CreateWindow("STATIC", "Play Window", WS_POPUP | WS_VISIBLE,
                         0, 0, _frame_width, _frame_height, 
-						(HWND)NULL, (HMENU)NULL,(HINSTANCE)NULL, (LPARAM)0);
-							 
+                        (HWND)NULL, (HMENU)NULL,(HINSTANCE)NULL, (LPARAM)0);
+                             
 13. 指定Video Render渲染到Picture控件
     IVideoWindow *p_video_window = NULL;
     hr = mp_graph->QueryInterface(IID_IVideoWindow, ( void** )&p_video_window );
@@ -280,16 +281,16 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     FreeConsole();
 
 18. 在DLL或应用程序中截获某窗口的消息，且消息可以继续传给默认窗口函数
-        //传递当前类的指针
-        SetWindowLong(_play_window, GWL_USERDATA, reinterpret_cast<long>(this));
-        //设置处理截获的消息的新窗口函数
-        //并获得旧窗口函数句柄
-        //以便新窗口函数处理完消息之后继续执行旧窗口函数处理消息
-        long ret = SetWindowLong(_play_window, GWL_WNDPROC, reinterpret_cast<long>(SubWndProc));
-        
-        //使用对象指针调用对象的函数
-        //以便操作类对象的成员变量
-        LRESULT SubWndProc(HWND hWnd, int uID, WPARAM wParam, LPARAM lParam)
+    //传递当前类的指针
+    SetWindowLong(_play_window, GWL_USERDATA, reinterpret_cast<long>(this));
+    //设置处理截获的消息的新窗口函数
+    //并获得旧窗口函数句柄
+    //以便新窗口函数处理完消息之后继续执行旧窗口函数处理消息
+    long ret = SetWindowLong(_play_window, GWL_WNDPROC, reinterpret_cast<long>(SubWndProc));
+    
+    //使用对象指针调用对象的函数
+    //以便操作类对象的成员变量
+    LRESULT SubWndProc(HWND hWnd, int uID, WPARAM wParam, LPARAM lParam)
     {
         long user_data = GetWindowLong(hWnd, GWL_USERDATA);
         MediaPlayer *this_player = reinterpret_cast<MediaPlayer*>(user_data);
@@ -406,7 +407,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         if(_is_timer_on) {
             timeKillEvent(_timer_ID);
             timeEndPeriod(TIMER_PRECISION);
-			_timer_ID = 0;
+            _timer_ID = 0;
             _is_timer_on = false;
         }
     }
@@ -442,7 +443,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     end_time = timeGetTime();
     end_time -= begin_time;
     timeEndPeriod(1);
-	
+    
 27. 信号量封装
     //声明semaphore类
     class semaphore
@@ -487,7 +488,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         }
         fHandle = CreateSemaphore(nullptr, fInitial, 0xFFFF, nullptr);
     }
-	
+    
 28. 自动锁
     //临界区封装
     class SectionLock {
@@ -532,9 +533,9 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     };
 29. 获得Jpeg文件或流的宽高信息
     //获得JPEG包的宽高信息
-	BYTE *frame_buffer = NULL;
-	int frame_size = 0;
-	/* 获得frame_buffer与frame_size代码省略*/
+    BYTE *frame_buffer = NULL;
+    int frame_size = 0;
+    /* 获得frame_buffer与frame_size代码省略*/
     int temp_width=0, temp_height=0;
     for(int i=0; i<(frame_size-9); ++i) {
         if(0xff == *(frame_buffer+i)) {
@@ -545,7 +546,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
             }
         }
     }
-	
+    
 30. 保存bmp文件方法
 bool saveToBMP(unsigned char *image_buffer, BITMAPINFOHEADER *info_header, const char *path)
 {
@@ -619,7 +620,7 @@ bool ImageSaver::saveToJPG(unsigned char *image_buffer, BITMAPINFOHEADER *info_h
     JSAMPROW pic_line;
 
     //初始化libjpeg变量
-	memset(&compress_info, 0, sizeof(compress_info));
+    memset(&compress_info, 0, sizeof(compress_info));
     compress_info.err = jpeg_std_error(&jpeg_error);
     jpeg_create_compress(&compress_info);
     jpeg_stdio_dest(&compress_info, (FILE*)file_handle);
@@ -735,9 +736,9 @@ bool saveToPNG(unsigned char *image_buffer, BITMAPINFOHEADER *info_header, const
          }
     }
     png_write_image(pic_ptr, pic_datas);
-	for(int i=0; i<hieght; ++i) {
-	    SafeDeleteArray(&pic_datas[i]);
-	}
+    for(int i=0; i<hieght; ++i) {
+        SafeDeleteArray(&pic_datas[i]);
+    }
     SafeDeleteArray(&pic_datas);
     png_write_end(pic_ptr, NULL);
 
@@ -752,7 +753,7 @@ done:
     SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
     //恢复自动休眠
     SetThreadExecutionState(ES_CONTINUOUS);
-	
+    
 34. 根据DirectShow的EC_VIDEO_SIZE_CHANGED事件的参数获得视频帧新宽高
     HRESULT hr = _media_event->GetEvent(&event_code, &param1, &param2, 0);
     //低八位为帧宽，高八位为帧高
