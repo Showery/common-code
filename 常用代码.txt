@@ -276,7 +276,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     freopen("CONOUT$", "w+t", stdout);
     freopen("CONIN$", "r+t", stdin);
     //关闭输入输出，释放控制台
-        fclose(stdout);
+    fclose(stdout);
     fclose(stdin);
     FreeConsole();
 
@@ -351,8 +351,16 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     
 21. MFC Unicode编码格式下打开文件并将文件名转换为char*
     char *file_path = NULL;
+#if 1
+    //打开只读文件
     CFileDialog file_dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
                         TEXT("MP4 Files(*.MP4)|*.mp4|All Files(*.*)|*.*||"));
+#else
+    //打开写入文件
+    CFileDialog dlg(FALSE, NULL, TEXT("*.ts"),
+        OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,
+        TEXT("TS文件(*.ts)|*.ts|所有文件(*.*)|*.*||"), NULL);
+#endif
     if(IDOK != file_dlg.DoModal()) {
         return;
     }

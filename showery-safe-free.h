@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 template< typename T_Delete >
 inline void SafeDelete( T_Delete **pp )
@@ -19,7 +19,7 @@ inline void SafeDeleteArray( T_Delete **pp)
 }
 
 template< typename T_Release >
-inline void SafeRelease( T_Release **pp )
+inline ULONG SafeRelease( T_Release **pp )
 {
     ULONG ret = 0;
     if(nullptr!=pp && nullptr!=*pp) {
