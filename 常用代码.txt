@@ -182,7 +182,7 @@ GetModuleFileName(NULL, szTemp, 100);
   m_hWnd = CreateWindow("STATIC", "Play Window", WS_POPUP | WS_VISIBLE,
                         0, 0, _frame_width, _frame_height, 
                         (HWND)NULL, (HMENU)NULL,(HINSTANCE)NULL, (LPARAM)0);
-                             
+
 13. 指定Video Render渲染到Picture控件
     IVideoWindow *p_video_window = NULL;
     hr = mp_graph->QueryInterface(IID_IVideoWindow, ( void** )&p_video_window );
@@ -329,7 +329,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
         }
     (5) 释放graph之前停止接收Graph事件
         _media_event->SetNotifyWindow(NULL, 0, 0);
-        
+
 20. 在代码中注册COM动态链接库
     HKEY key_value = NULL;
     //XD Source filter.
@@ -348,7 +348,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     }
     RegCloseKey(key_value);
     key_value = NULL;
-    
+
 21. MFC Unicode编码格式下打开文件并将文件名转换为char*
     char *file_path = NULL;
 #if 1
@@ -357,7 +357,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
                         TEXT("MP4 Files(*.MP4)|*.mp4|All Files(*.*)|*.*||"));
 #else
     //打开写入文件
-    CFileDialog dlg(FALSE, NULL, TEXT("*.ts"),
+    CFileDialog file_dlg(FALSE, NULL, TEXT("*.ts"),
         OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,
         TEXT("TS文件(*.ts)|*.ts|所有文件(*.*)|*.*||"), NULL);
 #endif
@@ -371,7 +371,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     file_path = new char[dwNum];
     WideCharToMultiByte(CP_OEMCP, NULL, wszPath, -1, file_path, dwNum, NULL, FALSE);
     SafeDelete(&file_path);
-    
+
 22. char*转wchar_t*(WCHAR*)
     char strMulByte[50] = "Just a test."
     DWORD size = MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, NULL, 0);
@@ -425,9 +425,12 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     }
     
 25. 禁用拷贝构造函数
+//禁用拷贝构造函数以及赋值操作运算符重载
+#ifndef DISALLOW_COPY_AND_ASSIGN
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)\
     TypeName(const TypeName&);            \
     void operator=(const TypeName&)
+#endif
     
 26. 计算时间差
     方法一：
@@ -767,3 +770,9 @@ done:
     //低八位为帧宽，高八位为帧高
     _frame_width = static_cast<int>(param1&0x0000ffff);
     _frame_height = static_cast<int>(param1&0xffff0000) >> 16;
+    
+35. 获得当前DLL的HMODULE
+    HMODULE hModule = NULL;
+    //Mothod 可为该DLL任意非类成员函数
+    GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, reinterpret_cast<LPCSTR>(&method), &hModule);
+    FreeLibrary(hModule);
