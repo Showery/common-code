@@ -193,7 +193,7 @@ GetModuleFileName(NULL, szTemp, 100);
     p_video_window->put_WindowStyle( WS_CHILD | WS_CLIPCHILDREN );
     CRect rect;
     p_cwnd->GetClientRect( &rect );
-p_video_window->SetWindowPosition( 0, 0, rect.right, rect.bottom );
+    p_video_window->SetWindowPosition( 0, 0, rect.right, rect.bottom );
 
 14. 初始化Picture控件为黑色
 //在OnPaint中调用此函数。
