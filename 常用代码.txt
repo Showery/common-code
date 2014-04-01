@@ -375,7 +375,7 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
 22. char*转wchar_t*(WCHAR*)
     char strMulByte[50] = "Just a test."
     DWORD size = MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, NULL, 0);
-    wchar_t strWideChar = new wchar_t[size];
+    wchar_t *strWideChar = new wchar_t[size];
     MultiByteToWideChar(CP_ACP, 0, strMulByte, -1, strWideChar, size);
     
 23. Win32 API 文件与路径是否存在的判断方法
@@ -776,3 +776,17 @@ done:
     //Mothod 可为该DLL任意非类成员函数
     GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, reinterpret_cast<LPCSTR>(&method), &hModule);
     FreeLibrary(hModule);
+    
+36. 创建标准线程
+UINT __stdcall processThread(void *arg)
+{
+    if(arg) {
+        ClassName *ptr = reinterpret_cast<ClassName*>(arg);
+        ptr->handleThread();
+    }
+    _endthreadex(0);
+    return 0;
+}
+
+_thread_handle = (HANDLE)_beginthreadex(nullptr, 0, &processThread, reinterpret_cast<void*>(this), 0, nullptr);
+CloseHandle(_thread_handle);
