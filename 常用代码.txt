@@ -425,11 +425,12 @@ HRESULT findOnlyPin(IBaseFilter *base_filter, IPin **ret_pin, const PIN_DIRECTIO
     }
     
 25. 禁用拷贝构造函数
-//禁用拷贝构造函数以及赋值操作运算符重载
+// A macro to disallow the copy constructor and operator= functions 
+// This should be used in the private:declarations for a class
 #ifndef DISALLOW_COPY_AND_ASSIGN
-#define DISALLOW_COPY_AND_ASSIGN(TypeName)\
-    TypeName(const TypeName&);            \
-    void operator=(const TypeName&)
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+    TypeName(const TypeName&);             \
+    TypeName& operator=(const TypeName&)
 #endif
     
 26. 计算时间差
