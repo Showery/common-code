@@ -791,3 +791,15 @@ UINT __stdcall processThread(void *arg)
 
 _thread_handle = (HANDLE)_beginthreadex(nullptr, 0, &processThread, reinterpret_cast<void*>(this), 0, nullptr);
 CloseHandle(_thread_handle);
+
+37. UNICODE编码下CString转换为char*的函数
+static char *CStringToCharPtr(CString src_str)
+{
+    char *ret_str = NULL;
+    TCHAR wsz_path[1024] = {'\0'};
+    lstrcpy(wsz_path, src_str);
+    DWORD dwNum = WideCharToMultiByte(CP_OEMCP, NULL, wsz_path, -1, NULL, 0, NULL, FALSE);
+    ret_str = new char[dwNum];
+    WideCharToMultiByte(CP_OEMCP, NULL, wsz_path, -1, ret_str, dwNum, NULL, FALSE);
+    return ret_str;
+}
